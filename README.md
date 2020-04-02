@@ -8,24 +8,24 @@ När du arbetar på din branch är du i en git fristad, pusha broken kod. Gör k
 
 Guidelines att följa:
 
-    Skapa en ny branch per feature att utveckla på
-    Utveckla klart din feature på din branch
-    Säkerställ kvalité på din feature
-    Byt till master branchen
-    Gör en pull på master branchen
-    Fixa eventuella merge-conflicts
-    Testa hela appen igen, se nedanstående “vid buggar” checklista
-    Om det inte finns några buggar > pusha till master
-    Gör en merge ifrån din feature branch
+    1. Skapa en ny branch per feature att utveckla på
+    2. Utveckla klart din feature på din branch
+    3. Säkerställ kvalité på din feature
+    4. Byt till master branchen
+    5. Gör en pull på master branchen
+    6. Fixa eventuella merge-conflicts
+    7. Testa hela appen igen, se nedanstående “vid buggar” checklista
+    8. Om det inte finns några buggar > pusha till master
+    9. Gör en merge ifrån din feature branch
 
 Om du hittar buggar på steg 8:
 
-    Ta bort den lokala icke-pushade committen som har skapats av merge operationen
-    Gå tillbaka till din branch
-    Gör en merge av master till din branch
-    Fixa eventuella merge-conflicts
-    Fixa buggarna, committa och pusha till din branch
-    Starta om hela checklistan. Inklusive steg 3 och steg 8!
+    1. Ta bort den lokala icke-pushade committen som har skapats av merge operationen
+    2. Gå tillbaka till din branch
+    3. Gör en merge av master till din branch
+    4. Fixa eventuella merge-conflicts
+    5. Fixa buggarna, committa och pusha till din branch
+    6. Starta om hela checklistan. Inklusive steg 3 och steg 8!
 
 Definition of done!
 
