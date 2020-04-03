@@ -3,9 +3,17 @@ import React, { Component } from 'react';
 export class Home extends Component {
   static displayName = Home.name;
 
+    async test(event) {
+        event.preventDefault();
+        let result = await fetch("/account/test");
+        let data = await result.json();
+        console.log(data);
+    }
+
   render () {
     return (
-      <div>
+        <div>
+            <input type="button" value="Test" className="btn btn-dark w-50 mb-5" onClick={this.test}/>
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>

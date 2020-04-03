@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace AgilProjektarbete
 {
@@ -12,25 +15,16 @@ namespace AgilProjektarbete
     [Route("[Controller]")]
     public class AccountController : Controller
     {
-        ApplicationContext dbContext;
+        ApplicationContext applicationContext;
         UserManager<User> userManager;
         IMapper mapper;
-       
 
-        public AccountController(ApplicationContext dbContext, UserManager<User> userManager, IMapper mapper)
+        public AccountController(UserManager<User> userManager, IMapper mapper, ApplicationContext applicationContext)
         {
-            this.dbContext = dbContext;
             this.userManager = userManager;
             this.mapper = mapper;
+            this.applicationContext = applicationContext;
         }
-
-        [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-
         
         [Route("register")]
         [HttpPost]
@@ -98,9 +92,59 @@ namespace AgilProjektarbete
             return result;
         }
 
-        public Result Test()
+        [Route("login")]
+        [HttpPost]
+        public async ValueTask<Result> Login(LoginFormModel model)
         {
-            return new Result { Success = true};
+            var result = new Result { Success = true };
+            var parsedModel = new LoginModel();
+            try
+            {
+                parsedModel.Email = model.Email;
+                parsedModel.Password = model.Password;
+                parsedModel.RememberMe = model.RememberMe;
+            }
+            catch (Exception ex)
+            {
+                result.ErrorMessages.Add(ex.Message);
+                result.Success = false;
+                return result;
+            }
+
+            if (!ModelState.IsValid)
+            {                
+                result.ErrorMessages.Add("Modelstate is not valid");
+                result.Success = false;
+                return result;
+            }
+
+            var user = await userManager.FindByEmailAsync(parsedModel.Email);
+            if (user != null &&
+                await userManager.CheckPasswordAsync(user, parsedModel.Password))
+            {
+                var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
+                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
+                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
+
+                await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme,
+                    new ClaimsPrincipal(identity));
+            } else
+            {
+                result.Success = false;
+                result.ErrorMessages.Add("Invalid username or password");
+                return result;
+            }
+                
+            return result;
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("test")]
+        public IEnumerable<Object> Test()
+        {
+            var result = applicationContext.Users.ToList();
+            return result;
         }
     }
 }
