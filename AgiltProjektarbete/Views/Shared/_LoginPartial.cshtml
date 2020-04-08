@@ -3,6 +3,14 @@
 @inject UserManager<User> UserManager
 
     <ul class="navbar-nav">
+        @if (User.IsInRole(Role.RestaurantOwner.ToString()))
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-controller="Restaurant" asp-action="AddRestaurant">
+                    Add Restaurant
+                </a>
+            </li>
+        }
         @if (SignInManager.IsSignedIn(User))
         {
             <li class="nav-item">

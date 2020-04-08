@@ -37,6 +37,8 @@ namespace AgiltProjektarbete
             //Add custom claims
             services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
 
+            services.AddScoped<IUserClaimsPrincipalFactory<User>, UserClaimsPrincipalFactory<User, IdentityRole>>();
+
             //Add automapper
             services.AddAutoMapper(typeof(Startup));
         }
