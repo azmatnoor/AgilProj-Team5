@@ -8,6 +8,7 @@ namespace AgiltProjektarbete
 {
     public class UserLoginModel
     {
+        [Display(Name = "E-mail")]
         [Required]
         [EmailAddress]
         public string Email { get; set; }
