@@ -1,19 +1,33 @@
 import React, { Component } from 'react';
+import { NavMenu } from './NavMenu';
 
 export class Home extends Component {
   static displayName = Home.name;
 
     async test(event) {
         event.preventDefault();
-        let result = await fetch("/account/test");
-        let data = await result.json();
-        console.log(data);
+        let result = await fetch("/account/test",
+            {
+                method: "GET",
+                headers: { 
+                    'allow': "GET",
+                    "Content-Type": "application/json"
+                },
+                credentials: 'include'
+            });
+        if (result.ok) {
+            let data = await result.json();
+            console.log(data);
+        } else {
+            console.log(result);
+        }
     }
 
-  render () {
+    render() {
+
     return (
         <div>
-            <input type="button" value="Test" className="btn btn-dark w-50 mb-5" onClick={this.test}/>
+        <input type="button" value="Test" className="btn btn-dark w-50 mb-5" onClick={this.test}/>
         <h1>Hello, world!</h1>
         <p>Welcome to your new single-page application, built with:</p>
         <ul>
@@ -22,7 +36,8 @@ export class Home extends Component {
           <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
         </ul>
         <p>To help you get started, we have also set up:</p>
-        <ul>
+            <ul>
+           
           <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
           <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
           <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>

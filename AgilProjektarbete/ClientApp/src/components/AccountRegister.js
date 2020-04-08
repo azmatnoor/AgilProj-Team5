@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 
 export class AccountRegister extends Component {
     static displayName = AccountRegister.name;
@@ -16,7 +15,7 @@ export class AccountRegister extends Component {
             ZipCode: "",
             Password: "",
             ConfirmPassword: "",
-            Role: ""
+            Role: "Customer"
         };
     }
 

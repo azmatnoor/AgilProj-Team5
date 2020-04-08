@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,12 +17,14 @@ namespace AgilProjektarbete
     public class AccountController : Controller
     {
         ApplicationContext applicationContext;
+        SignInManager<User> signInManager;
         UserManager<User> userManager;
         IMapper mapper;
 
-        public AccountController(UserManager<User> userManager, IMapper mapper, ApplicationContext applicationContext)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IMapper mapper, ApplicationContext applicationContext)
         {
             this.userManager = userManager;
+            this.signInManager = signInManager;
             this.mapper = mapper;
             this.applicationContext = applicationContext;
         }
@@ -58,13 +61,6 @@ namespace AgilProjektarbete
                 return result;
             }
 
-            if (!ModelState.IsValid)
-            {
-                result.Success = false;
-                result.ErrorMessages.Add("Modelstate is not valid");
-                return result;      
-            }
-
             try
             {
                 var user = mapper.Map<User>(parsedModel);
@@ -83,7 +79,6 @@ namespace AgilProjektarbete
             }
             catch (Exception ex)
             {
-
                 result.ErrorMessages.Add(ex.Message);
                 result.Success = false;
                 return result;
@@ -94,7 +89,7 @@ namespace AgilProjektarbete
 
         [Route("login")]
         [HttpPost]
-        public async ValueTask<Result> Login(LoginFormModel model)
+        public async ValueTask<Result> Login([FromBody]LoginFormModel model)
         {
             var result = new Result { Success = true };
             var parsedModel = new LoginModel();
@@ -111,24 +106,8 @@ namespace AgilProjektarbete
                 return result;
             }
 
-            if (!ModelState.IsValid)
-            {                
-                result.ErrorMessages.Add("Modelstate is not valid");
-                result.Success = false;
-                return result;
-            }
-
-            var user = await userManager.FindByEmailAsync(parsedModel.Email);
-            if (user != null &&
-                await userManager.CheckPasswordAsync(user, parsedModel.Password))
-            {
-                var identity = new ClaimsIdentity(IdentityConstants.ApplicationScheme);
-                identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, user.Id));
-                identity.AddClaim(new Claim(ClaimTypes.Name, user.UserName));
-
-                await HttpContext.SignInAsync(IdentityConstants.ApplicationScheme,
-                    new ClaimsPrincipal(identity));
-            } else
+            var userResult = await signInManager.PasswordSignInAsync(parsedModel.Email, parsedModel.Password, parsedModel.RememberMe, false); ;
+            if (!userResult.Succeeded)
             {
                 result.Success = false;
                 result.ErrorMessages.Add("Invalid username or password");
@@ -138,7 +117,6 @@ namespace AgilProjektarbete
             return result;
         }
 
-        [Authorize]
         [HttpGet]
         [Route("test")]
         public IEnumerable<Object> Test()

@@ -22,16 +22,21 @@ export class Login extends Component {
         event.preventDefault();
         let result = await fetch("/account/login", {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json'
+            },     
+            credentials: 'include',
             body: JSON.stringify(this.state)
         });
-        let data = await result.json();
-        console.log(data);
+        if (result.ok) {
+            let data = await result.json();
+            console.log(data);
 
-        document.getElementById("errormessage").innerHTML = data.errorMessages;
+            document.getElementById("errormessage").innerHTML = data.errorMessages;
 
-        if (data.success) {
-            this.props.history.push('/')
+            if (data.success) {
+                this.props.history.push('/')
+            }
         }
     }
 
@@ -39,7 +44,7 @@ export class Login extends Component {
         let { Email, Password, RememberMe } = this.state
         return (
             <div>
-                <h2 className="display-4 text-center">Register</h2>
+                <h2 className="display-4 text-center">Log in</h2>
                 <p className="text-danger text-center" id="errormessage"></p>
                 <div className="row mx-auto text-center container">
                     <div className="container col-md-6">
