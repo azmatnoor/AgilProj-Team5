@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AgiltProjektarbete.Migrations
 {
-    public partial class CreateDatabase : Migration
+    public partial class insertRole : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -229,6 +229,16 @@ namespace AgiltProjektarbete.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "6ce35fa1-08e0-4eff-b8e5-cf66f8540f93", "17a9f161-9d90-4016-9da2-4148ce2791ee", "Customer", "CUSTOMER" });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
+                values: new object[] { "6f55fc2b-ed9e-452c-a30d-d974473e3bd1", "02633cb5-f734-471d-8c33-cd8c7e3367ac", "RestaurantOwner", "RESTAURANTOWNER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",

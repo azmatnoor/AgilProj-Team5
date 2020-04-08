@@ -6,16 +6,19 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AgiltProjektarbete.Models;
+using Microsoft.AspNetCore.Authorization;
 
-namespace AgiltProjektarbete.Controllers
+namespace AgiltProjektarbete
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        ApplicationContext context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ApplicationContext context)
         {
             _logger = logger;
+            this.context = context;
         }
 
         public IActionResult Index()
@@ -23,6 +26,7 @@ namespace AgiltProjektarbete.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
             return View();

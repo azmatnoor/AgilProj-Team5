@@ -4,16 +4,14 @@ using AgiltProjektarbete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AgiltProjektarbete.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200408071759_CreateDatabase")]
-    partial class CreateDatabase
+    partial class ApplicationContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -199,6 +197,22 @@ namespace AgiltProjektarbete.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "6ce35fa1-08e0-4eff-b8e5-cf66f8540f93",
+                            ConcurrencyStamp = "17a9f161-9d90-4016-9da2-4148ce2791ee",
+                            Name = "Customer",
+                            NormalizedName = "CUSTOMER"
+                        },
+                        new
+                        {
+                            Id = "6f55fc2b-ed9e-452c-a30d-d974473e3bd1",
+                            ConcurrencyStamp = "02633cb5-f734-471d-8c33-cd8c7e3367ac",
+                            Name = "RestaurantOwner",
+                            NormalizedName = "RESTAURANTOWNER"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
