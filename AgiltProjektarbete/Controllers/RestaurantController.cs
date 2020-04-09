@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgiltProjektarbete.Controllers
 {
+    [Authorize]
     public class RestaurantController : Controller
     {
         private ApplicationContext context;
@@ -22,25 +23,12 @@ namespace AgiltProjektarbete.Controllers
             this.userManager = userManager;
         }
 
-        [Authorize]
         public async Task<IActionResult> Index()
         {
-            var restaurant = from r in await context.Restaurants.ToListAsync()
-                              join user in await context.Users.ToListAsync() on r.Owner.Id equals userManager.GetUserAsync(User).Result.Id
-                              where r.Owner.Id == userManager.GetUserAsync(User).Result.Id                             
-                              select r;
-
-            if(restaurant.Count() > 0)
-            {
-                return View(restaurant.First());
-            } else
-            {
-                return RedirectToAction("AddRestaurant");
-            }
+            return View();
         }
 
         [HttpGet]
-        [Authorize]
         public IActionResult AddRestaurant()
         {
             if(context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).Count() < 1)
@@ -54,7 +42,6 @@ namespace AgiltProjektarbete.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> AddRestaurant(RestaurantRegistrationModel model)
         {
             if (!ModelState.IsValid)
