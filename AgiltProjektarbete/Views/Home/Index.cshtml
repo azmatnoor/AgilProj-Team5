@@ -1,8 +1,61 @@
-﻿@{
+﻿@model SearchRestaurantModel;
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mx-auto">
+    <img src="~/images/pizzalogo.png" alt="Logo" class="img-fluid" />
 </div>
+
+<div class="container pb-1">
+    <br />
+    <div class="row">
+        <div class="col-2 col-md-2 col-lg-2">
+            <form asp-action="Index">
+                <div class="row text-center">
+                    <label class="font-weight-light">Search by zip code</label>
+                    <input asp-for="SearchValue" class="form-control form-control-lg form-control-borderless" type="text">
+                </div>
+            </form>
+        </div>       
+        <span asp-validation-for="SearchValue" class="col-4 text-danger"></span>
+    </div>
+</div>
+
+<!--NOT DONE, NEED UPDATED RESTAURANT DATABASEMODEL FROM WEB5-51 BRANCH-->
+<table class="table table-hover">
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">ZipCode</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (@Model.Restaurants.Count() > 0)
+        {
+            @foreach (var restaurant in Model.Restaurants.Select((Value, index) => new { index, Value }))
+            {
+                <tr>
+                    <th scope="col">@restaurant.index</th>
+                    <td>@restaurant.Value.Id</td>
+                    <td>@restaurant.Value.ZIPCode</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td>No Results</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@if (@Model.Restaurants.Count() > 0)
+{
+    <span class="font-weight-light">Displaying @Model.Restaurants.Count() results</span>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

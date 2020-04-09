@@ -7,23 +7,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AgiltProjektarbete.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace AgiltProjektarbete
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        ApplicationContext context;
+        private readonly ApplicationContext context;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationContext context)
+        public HomeController(ApplicationContext context)
         {
-            _logger = logger;
             this.context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(SearchRestaurantModel model)
         {
-            return View();
+            if(model.Restaurants == null && model.SearchValue == default)
+            {
+                model = new SearchRestaurantModel();
+            }
+            
+            model.Restaurants = await context.Restaurants.ToListAsync();
+
+            if(model.SearchValue != default)
+            {
+                model.Restaurants = model.Restaurants.Where(o => o.ZIPCode == model.SearchValue).ToList();
+            }
+
+            return View(model);
         }
 
         [Authorize]
