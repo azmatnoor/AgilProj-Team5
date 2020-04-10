@@ -25,7 +25,15 @@ namespace AgiltProjektarbete.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View();
+            Restaurant restaurant = new Restaurant();
+            try
+            {
+                restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
+            }
+            catch (Exception)
+            {
+            }
+            return View(restaurant);
         }
 
         [HttpGet]
