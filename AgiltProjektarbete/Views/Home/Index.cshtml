@@ -7,20 +7,17 @@
     <img src="~/images/pizzalogo.png" alt="Logo" class="img-fluid" />
 </div>
 
-<div class="container pb-1">
-    <br />
-    <div class="row">
-        <div class="col-2 col-md-2 col-lg-2">
-            <form asp-action="Index">
-                <div class="row text-center">
-                    <label class="font-weight-light">Search by zip code</label>
-                    <input asp-for="SearchValue" class="form-control form-control-lg form-control-borderless" type="text">
-                </div>
-            </form>
-        </div>       
-        <span asp-validation-for="SearchValue" class="col-4 text-danger"></span>
+<form asp-action="Index">
+    <span class="font-weight-light">Search by zip code</span>
+    <div class="input-group mb-3 w-50">
+        <input type="text" asp-for="SearchValue" class="form-control" placeholder="Search by zipcode">
+        <div class="input-group-append">        
+            <button class="btn btn-secondary" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
     </div>
-</div>
+</form>
 
 <!--NOT DONE, NEED UPDATED RESTAURANT DATABASEMODEL FROM WEB5-51 BRANCH-->
 <table class="table table-hover">
