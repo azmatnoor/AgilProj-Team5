@@ -13,7 +13,7 @@ namespace AgiltProjektarbete
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        ApplicationContext context;
+        private readonly ApplicationContext context;
 
         public HomeController(ILogger<HomeController> logger, ApplicationContext context)
         {

@@ -14,5 +14,6 @@ namespace AgiltProjektarbete
         [NotMapped]
         public List<string> Ingredients { get; set; }
         public int Price { get; set; }
+        public string RestaurantId { get; set; }
     }
 }

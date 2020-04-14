@@ -1,0 +1,68 @@
+﻿@model CreateMenuModel
+@{
+    ViewData["Title"] = "EditMenu";
+}
+
+<h1 class="text-center m-5">@Model.Restaurant.Name</h1>
+<h3>Menu</h3>
+<div class="mt-3 mb-3">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Pizza</th>
+                <th scope="col">Price</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (@Model.CurrentMenu != null && @Model.CurrentMenu.Count() > 0)
+            {
+                @foreach (var pizza in @Model.CurrentMenu)
+                {
+                    <tr>
+                        <td>@pizza.Name</td>
+                        <td>@pizza.Price kr</td>
+                        <td>
+                            <form method="post">
+                                <button type="submit" asp-action="DeletePizza" asp-route-id="@pizza.Id" class="btn btn-danger float-right"><i class="fa fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td>Nothing in menu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<hr />
+<div class="container mt-5">
+    <p>
+        <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddPizza" aria-expanded="false" aria-controls="collapseAddPizza">
+            Add Pizza
+        </button>
+    </p>
+    <div class="collapse mb-5" id="collapseAddPizza">
+        <form asp-action="AddPizza" class="w-50">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" asp-for="Pizza.Name" class="form-control" />
+                <span asp-validation-for="Pizza.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" asp-for="Pizza.Price" class="form-control" />
+                <span asp-validation-for="Pizza.Price" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-dark">Add</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

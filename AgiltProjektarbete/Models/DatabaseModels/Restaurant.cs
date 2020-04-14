@@ -11,6 +11,7 @@ namespace AgiltProjektarbete
     {
         [Column("id")]
         public virtual string Id { get; set; }
+        public string Name { get; set; }
         public virtual User Owner { get; set; }
         public virtual ICollection<Pizza> Menu { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
