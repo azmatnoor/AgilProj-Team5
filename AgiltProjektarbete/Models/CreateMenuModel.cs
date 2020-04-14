@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace AgiltProjektarbete
 {
-    public class CreateMenuModel
+    public class EditMenuModel
     {
         public Pizza Pizza { get; set; }
         public Restaurant Restaurant { get; set; }

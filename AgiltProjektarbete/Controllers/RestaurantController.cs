@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace AgiltProjektarbete.Controllers
+namespace AgiltProjektarbete
 {
     //ADD ONLY ACCESS TO OWNERS AFTER/IN MERGE
     [Authorize]
@@ -23,7 +23,7 @@ namespace AgiltProjektarbete.Controllers
         [HttpGet]
         public async Task<IActionResult> EditMenu()
         {
-            var model = new CreateMenuModel();
+            var model = new EditMenuModel();
             model.Restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
             model.CurrentMenu = context.Pizzas.Where(o => o.RestaurantId == model.Restaurant.Id).ToList();
 
@@ -37,7 +37,7 @@ namespace AgiltProjektarbete.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPizza(CreateMenuModel model)
+        public async Task<IActionResult> AddPizza(EditMenuModel model)
         {
             if(model.Pizza != null)
             {
