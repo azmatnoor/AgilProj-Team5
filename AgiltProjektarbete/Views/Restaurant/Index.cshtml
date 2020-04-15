@@ -1,0 +1,13 @@
+﻿@model Restaurant
+@{
+    ViewData["Title"] = "Index";
+}
+
+@if(Model.Id != null)
+{
+    <h4>You can only get here if you have a restaurant registered</h4>
+    <p>Placeholder, should probably display a single restaurant overview later</p>
+} else
+{
+    <h1>You are not a registered restaurant owner</h1>
+}

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using AgiltProjektarbete.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
 namespace AgiltProjektarbete
@@ -37,9 +36,6 @@ namespace AgiltProjektarbete
             return View(model);
         }
 
-        [Authorize]
-        public IActionResult Privacy()
-        {
             return View();
         }
 
