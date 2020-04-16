@@ -52,7 +52,7 @@ namespace AgiltProjektarbete
             {
                 return RedirectToAction("AddRestaurant");
             }
-        }
+        }    
 
         [HttpPost]
         public async Task<IActionResult> AddPizza(CreateMenuModel model)

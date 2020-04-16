@@ -1,48 +1,57 @@
-﻿@model Restaurant
+﻿@using Microsoft.AspNetCore.Identity
+
+@model Restaurant
+@inject UserManager<User> UserManager;
+
 @{
     ViewData["Title"] = "Index";
 }
-@if (Model != null)
-{
-    <h1 class="text-center text-danger mb-5">@Model.Name</h1>
-    <div class="mt-3 mb-3">
-        <table class="table">
-            <thead class="thead-dark">
-                <tr>
-                    <th scope="col">Pizza</th>
-                    <th scope="col">Price</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (@Model.Menu != null && @Model.Menu.Count() > 0)
-                {
-                    @foreach (var pizza in @Model.Menu)
-                    {
-                        <tr>
-                            <td>@pizza.Name</td>
-                            <td>@pizza.Price kr</td>
-                        </tr>
-                    }
-                }
-                else
+<div class="mb-5 text-center">
+    <h1 id="restaurantName" style="color:#e5a478">@Model.Name</h1>
+    <span>@Model.Address, @Model.ZIPCode</span> <br />
+    <span>@Model.Phone</span>
+</div>
+<div class="mt-3 mb-3">
+    <table class="table">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Pizza</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (@Model.Menu != null && @Model.Menu.Count() > 0)
+            {
+                @foreach (var pizza in @Model.Menu)
                 {
                     <tr>
-                        <td>Nothing in menu</td>
+                        <td>@pizza.Name</td>
+                        <td>@pizza.Price kr</td>
                     </tr>
                 }
-            </tbody>
-        </table>
+            }
+            else
+            {
+                <tr>
+                    <td>Nothing in menu</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@if (Model.Owner.Id == UserManager.GetUserAsync(User).Result.Id)
+{
+    <div class="text-center">
+        <a asp-action="EditMenu" class="btn btn-dark">Edit Menu</a>
     </div>
-    <ul>
-        <li> <a class="nav-link text-dark" asp-action="EditMenu">Edit Menu</a> </li>
-    </ul>
-    <div class="container mt-5">
+    <hr />
+    <div class="container mt-5 p-0">
         <p>
-            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddPizza" aria-expanded="false" aria-controls="collapseAddPizza">
+            <button class="btn btn-dark" type="button" data-toggle="collapse" data-target="#collapseEditInfo" aria-expanded="false" aria-controls="collapseEditInfo">
                 Edit Info
             </button>
         </p>
-        <div class="collapse mb-5" id="collapseAddPizza">
+        <div class="collapse mb-5" id="collapseEditInfo">
             <form asp-action="UpdateRestaurantInfo" class="w-50">
                 <div class="form-group">
                     <label>Name</label>
@@ -50,16 +59,40 @@
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
                 <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" asp-for="Address" class="form-control" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label>ZipCode</label>
                     <input type="number" asp-for="ZIPCode" class="form-control" />
                     <span asp-validation-for="ZIPCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="text" asp-for="Phone" class="form-control" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label>Price Per Km</label>
                     <input type="range" min="0" max="25" step="1" id="pricePerKmSlider" asp-for="PricePerKilometer" class="form-control" />
                     <span id="pricePerKm"></span>
                 </div>
-                <button type="submit" class="btn btn-dark">Confirm</button>
+                <button type="submit" class="btn btn-success">Confirm</button>
+            </form>
+        </div>
+    </div>
+    <div class="container mt-2 p-0">
+        <p>
+            <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#collapseDeleteRestaurant" aria-expanded="false" aria-controls="collapseDeleteRestaurant">
+                Delete Restaurant
+            </button>
+        </p>
+        <div class="collapse mb-5" id="collapseDeleteRestaurant">
+            <form asp-action="DeleteRestaurant" class="mt-3 border border-danger rounded p-3 w-50">
+                <label for="#deleteCheck">Enter Restaurant Name</label>
+                <input type="text" id="deleteCheck" class="form-control mb-2" />
+                <button type="submit" id="deleteButton" disabled class="btn btn-danger">Delete</button>
             </form>
         </div>
     </div>
