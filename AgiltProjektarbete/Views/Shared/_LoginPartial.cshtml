@@ -1,15 +1,28 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
+@inject ApplicationContext context 
+
 
     <ul class="navbar-nav">
         @if (User.Identity.IsAuthenticated && User.IsInRole(Role.RestaurantOwner.ToString()))
         {
-            <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Restaurant" asp-action="AddRestaurant">
-                    Add Restaurant
-                </a>
-            </li>
+            if (context.Restaurants.Where(o => o.Owner == UserManager.GetUserAsync(User).Result).Count() > 0)
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="Restaurant" asp-action="Index">
+                        My Restaurant
+                    </a>
+                </li>
+            }
+            else
+            {
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-controller="Restaurant" asp-action="AddRestaurant">
+                        Add Restaurant
+                    </a>
+                </li>
+            }
         }
         @if (SignInManager.IsSignedIn(User))
         {

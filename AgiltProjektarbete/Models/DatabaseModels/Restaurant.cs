@@ -15,7 +15,7 @@ namespace AgiltProjektarbete
         [NotMapped]
         public List<string> Ingredients { get; set; }
         [Required]
-        [MinLength(5)]
+        
 
         public int ZIPCode { get; set; }
         public int PricePerKilometer { get; set; }

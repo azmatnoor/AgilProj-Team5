@@ -2,12 +2,65 @@
 @{
     ViewData["Title"] = "Index";
 }
-
-@if(Model.Id != null)
+@if (Model != null)
 {
-    <h4>You can only get here if you have a restaurant registered</h4>
-    <p>Placeholder, should probably display a single restaurant overview later</p>
-} else
-{
-    <h1>You are not a registered restaurant owner</h1>
+    <h1 class="text-center text-danger mb-5">@Model.Name</h1>
+    <div class="mt-3 mb-3">
+        <table class="table">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">Pizza</th>
+                    <th scope="col">Price</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (@Model.Menu != null && @Model.Menu.Count() > 0)
+                {
+                    @foreach (var pizza in @Model.Menu)
+                    {
+                        <tr>
+                            <td>@pizza.Name</td>
+                            <td>@pizza.Price kr</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td>Nothing in menu</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <ul>
+        <li> <a class="nav-link text-dark" asp-action="EditMenu">Edit Menu</a> </li>
+    </ul>
+    <div class="container mt-5">
+        <p>
+            <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddPizza" aria-expanded="false" aria-controls="collapseAddPizza">
+                Edit Info
+            </button>
+        </p>
+        <div class="collapse mb-5" id="collapseAddPizza">
+            <form asp-action="UpdateRestaurantInfo" class="w-50">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>ZipCode</label>
+                    <input type="number" asp-for="ZIPCode" class="form-control" />
+                    <span asp-validation-for="ZIPCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Price Per Km</label>
+                    <input type="range" min="0" max="25" step="1" id="pricePerKmSlider" asp-for="PricePerKilometer" class="form-control" />
+                    <span id="pricePerKm"></span>
+                </div>
+                <button type="submit" class="btn btn-dark">Confirm</button>
+            </form>
+        </div>
+    </div>
 }

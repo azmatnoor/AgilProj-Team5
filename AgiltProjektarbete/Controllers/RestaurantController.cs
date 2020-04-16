@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AgiltProjektarbete
 {
@@ -29,6 +30,7 @@ namespace AgiltProjektarbete
             try
             {
                 restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
+                restaurant.Menu = context.Pizzas.Where(r => r.RestaurantId == restaurant.Id).ToList();
             }
             catch (Exception)
             {
@@ -39,7 +41,7 @@ namespace AgiltProjektarbete
         [HttpGet]
         public async Task<IActionResult> EditMenu()
         {
-            var model = new EditMenuModel();
+            var model = new CreateMenuModel();
             model.Restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
             model.CurrentMenu = context.Pizzas.Where(o => o.RestaurantId == model.Restaurant.Id).ToList();
 
@@ -53,7 +55,7 @@ namespace AgiltProjektarbete
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPizza(EditMenuModel model)
+        public async Task<IActionResult> AddPizza(CreateMenuModel model)
         {
             if(model.Pizza != null)
             {
@@ -125,6 +127,15 @@ namespace AgiltProjektarbete
             await context.Restaurants.AddAsync(restaurant);
             await context.SaveChangesAsync();
 
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateRestaurantInfo(Restaurant restaurant)
+        {
+            restaurant.Id = context.Restaurants.AsNoTracking().Where(x => x.Owner.Id == userManager.GetUserAsync(User).Result.Id).First().Id;
+            context.Restaurants.Update(restaurant);
+            context.SaveChanges();
             return RedirectToAction("Index");
         }
     }
