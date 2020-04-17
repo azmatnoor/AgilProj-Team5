@@ -39,7 +39,8 @@
         </tbody>
     </table>
 </div>
-@if (Model.Owner.Id == UserManager.GetUserAsync(User).Result.Id)
+
+@if (Model.Owner != null)
 {
     <div class="text-center">
         <a asp-action="EditMenu" class="btn btn-dark">Edit Menu</a>

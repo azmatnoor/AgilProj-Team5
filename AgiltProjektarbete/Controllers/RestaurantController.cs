@@ -8,36 +8,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AgiltProjektarbete
 {
-    //ADD ONLY ACCESS TO OWNERS AFTER/IN MERGE
-    [Authorize]
     public class RestaurantController : Controller
     {
         private ApplicationContext context;
         private UserManager<User> userManager;
-        private SignInManager<User> signInManager;
 
         public RestaurantController(ApplicationContext context, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             this.context = context;
-            this.signInManager = signInManager;
             this.userManager = userManager;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index([FromRoute]string id)
         {
-            Restaurant restaurant = new Restaurant();
-            try
+            var restaurant = new Restaurant();
+            if(id != null)
             {
-                restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
-                restaurant.Menu = context.Pizzas.Where(r => r.RestaurantId == restaurant.Id).ToList();
-            }
-            catch (Exception)
+                restaurant = context.Restaurants.Where(r => r.Id == id).Single();
+            } else
             {
+                restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).Single();
             }
+
+            restaurant.Menu = await context.Pizzas.Where(p => p.RestaurantId == restaurant.Id).ToListAsync();
             return View(restaurant);
         }
 
+        [Authorize(Roles="RestaurantOwner")]
         [HttpGet]
         public async Task<IActionResult> EditMenu()
         {
@@ -52,8 +50,9 @@ namespace AgiltProjektarbete
             {
                 return RedirectToAction("AddRestaurant");
             }
-        }    
+        }
 
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPost]
         public async Task<IActionResult> AddPizza(CreateMenuModel model)
         {
@@ -79,6 +78,7 @@ namespace AgiltProjektarbete
             return RedirectToAction("EditMenu");
         }
 
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPost]
         public async Task<IActionResult> DeletePizza(string id)
         {
@@ -93,6 +93,7 @@ namespace AgiltProjektarbete
             return RedirectToAction("EditMenu");
         }
 
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpGet]
         public IActionResult AddRestaurant()
         {
@@ -106,6 +107,7 @@ namespace AgiltProjektarbete
             }
         }
 
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRestaurant(RestaurantRegistrationModel model)
@@ -119,6 +121,8 @@ namespace AgiltProjektarbete
             {
                 Id = guid,
                 Name = model.Name,
+                Address = model.Address,
+                Phone = model.Phone,
                 Owner = await userManager.GetUserAsync(User),
                 PricePerKilometer = model.PricePerKilometer,
                 ZIPCode = int.Parse(model.ZIPCode)
@@ -130,6 +134,7 @@ namespace AgiltProjektarbete
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "RestaurantOwner")]
         [HttpPost]
         public async Task<IActionResult> UpdateRestaurantInfo(Restaurant restaurant)
         {

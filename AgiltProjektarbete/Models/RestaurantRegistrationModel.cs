@@ -10,6 +10,7 @@ namespace AgiltProjektarbete
     {
         public string Name { get; set; }
         public string Address { get; set; }
+        public string Phone { get; set; }
         [Display(Name="Zip Code")]
         public string ZIPCode { get; set; }
         [Display(Name = "Price per kilometer")]
