@@ -44,14 +44,12 @@
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="UserRole" type="radio" value="Customer" class="control-label">
-                <label asp-for="UserRole">Customer</label><br />
-                <span asp-validation-for="UserRole" class="text-danger"></span>
+                <input asp-for="UserRole" type="radio" value="Customer" id="customer">
+                <label for="customer" class="control-label">Customer</label>
             </div>
             <div class="form-group">
-                <input asp-for="UserRole" type="radio" value="RestaurantOwner" class="control-label">
-                <label asp-for="UserRole">Restaurant Owner</label>
-                <span asp-validation-for="UserRole" class="text-danger"></span>
+                <input asp-for="UserRole" type="radio" value="RestaurantOwner" id="owner">
+                <label for="owner" class="control-label">Restaurant Owner</label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
