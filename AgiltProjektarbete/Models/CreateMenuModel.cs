@@ -2,7 +2,7 @@
 
 namespace AgiltProjektarbete
 {
-    public class EditMenuModel
+    public class CreateMenuModel
     {
         public Pizza Pizza { get; set; }
         public Restaurant Restaurant { get; set; }

@@ -23,7 +23,7 @@ namespace AgiltProjektarbete
         [HttpGet]
         public async Task<IActionResult> EditMenu()
         {
-            var model = new EditMenuModel();
+            var model = new CreateMenuModel();
             model.Restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
             model.CurrentMenu = context.Pizzas.Where(o => o.RestaurantId == model.Restaurant.Id).ToList();
 
@@ -37,7 +37,7 @@ namespace AgiltProjektarbete
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddPizza(EditMenuModel model)
+        public async Task<IActionResult> AddPizza(CreateMenuModel model)
         {
             if(model.Pizza != null)
             {
