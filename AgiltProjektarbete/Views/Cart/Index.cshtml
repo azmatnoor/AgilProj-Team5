@@ -1,0 +1,35 @@
+﻿@model IEnumerable<OrderItem>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Cart</h1>
+<table class="table">
+    <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Quantity</th>
+        <th scope="col">Sub total</th>
+        <th scope="col"> </th>
+        <th scope="col"> </th>
+    </tr>
+    @foreach (var item in @Model)
+    {
+<tr>
+    <td>@item.Pizza.Name</td>
+    <td>@item.Pizza.Price</td>
+    <td>@item.Quantity</td>
+    <td>(@item.Pizza.Price*@item.Quantity)</td>
+    <td><a asp-action="remove" asp-route-id="@item.Pizza.Id" class="btn btn-danger"> Remove</a></td>
+</tr>
+    }
+    <tr>
+        <td scope="col">
+            sum here after I figure out the calculation xd
+        </td>
+    </tr>
+</table>
+<br />
+<a asp-controller="Order" asp-action="Order" class="btn btn-dark mb-3">Order</a>
+<br />
+<a asp-controller="Home" asp-action="Index" class="btn btn-dark">Back to home</a>
+

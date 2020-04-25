@@ -27,6 +27,8 @@ namespace AgiltProjektarbete
         {
             services.AddControllersWithViews();
 
+            services.AddSession();
+
             //Add DbContext
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Onlinepizza")));
 
@@ -54,6 +56,8 @@ namespace AgiltProjektarbete
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseSession();
+
             app.UseStaticFiles();
 
             app.UseRouting();
