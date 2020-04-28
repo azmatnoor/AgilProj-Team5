@@ -15,6 +15,7 @@
             <tr>
                 <th scope="col">Pizza</th>
                 <th scope="col">Price</th>
+                <th scope="col">Ingredients</th>
                 <th scope="col"></th>
             </tr>
         </thead>
@@ -26,6 +27,7 @@
                     <tr>
                         <td>@pizza.Name</td>
                         <td>@pizza.Price kr</td>
+                        <td>@pizza.Ingredients</td>
                         <td>
                             <form method="post">
                                 <button type="submit" asp-action="DeletePizza" asp-route-id="@pizza.Id" class="btn btn-danger float-right"><i class="fa fa-trash"></i></button>
@@ -61,6 +63,11 @@
                 <label>Price</label>
                 <input type="number" asp-for="Pizza.Price" class="form-control" />
                 <span asp-validation-for="Pizza.Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Ingredients</label>
+                <input type="text" asp-for="Pizza.Ingredients" class="form-control" />
+                <span asp-validation-for="Pizza.Ingredients" class="text-danger"></span>
             </div>
             <button type="submit" class="btn btn-dark">Add</button>
         </form>
