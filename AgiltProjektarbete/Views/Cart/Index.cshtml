@@ -1,30 +1,35 @@
-﻿@model IEnumerable<OrderItem>
+﻿@model OrderItems
 @{
     ViewData["Title"] = "Index";
+    int total = 0;
 }
 
 <h1>Cart</h1>
 <table class="table">
     <tr>
         <th scope="col">Name</th>
+        <th scope="col">Price</th>
         <th scope="col">Quantity</th>
         <th scope="col">Sub total</th>
         <th scope="col"> </th>
-        <th scope="col"> </th>
     </tr>
-    @foreach (var item in @Model)
+    @foreach (var item in @Model.Pizzas)
     {
-<tr>
-    <td>@item.Pizza.Name</td>
-    <td>@item.Pizza.Price</td>
-    <td>@item.Quantity</td>
-    <td>(@item.Pizza.Price*@item.Quantity)</td>
-    <td><a asp-action="remove" asp-route-id="@item.Pizza.Id" class="btn btn-danger"> Remove</a></td>
-</tr>
+    <tr>
+    <td>@item.Name</td>
+    <td>@item.Price</td>
+    <td>@Model.Quantity[@item.Id]</td>
+    <td>@(@item.Price * @Model.Quantity[@item.Id])</td>
+    <td><a asp-action="remove" asp-route-id="@item.Id" class="btn btn-danger">Remove</a></td>
+    </tr>
     }
     <tr>
         <td scope="col">
-            sum here after I figure out the calculation xd
+            @for (int i = 0; i < @Model.Pizzas.Count; i++)
+            {
+                total += (@Model.Pizzas[i].Price * @Model.Quantity[@Model.Pizzas[i].Id]);
+            }
+            Total: @total
         </td>
     </tr>
 </table>

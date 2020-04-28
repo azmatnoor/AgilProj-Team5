@@ -16,53 +16,62 @@ namespace AgiltProjektarbete.Controllers
         }
         public IActionResult Index()
         {
-            var cart = SessionHelper.GetObjectFromJson<List<OrderItem>>(HttpContext.Session, "cart");
+            var cart = SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart");
             return View(cart);
         }
 
-        public IActionResult Buy(string id)
+        [NonAction]
+        public FetchResult Buy(string id, string restaurantId)
         {
-            if(SessionHelper.GetObjectFromJson<List<OrderItem>>(HttpContext.Session, "cart") == null)
+            var fetchResult = new FetchResult();
+            if(SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart") == null)
             {
-                var cart = new List<OrderItem>();
-                cart.Add(new OrderItem { Pizza = context.Pizzas.Single(o => o.Id == id), Quantity = 1 });
+                var cart = new OrderItems();
+                cart.RestaurantId = context.Restaurants.Single(o => o.Id == restaurantId).Id;
+                cart.Pizzas.Add(context.Pizzas.Single(o => o.Id == id));
+                cart.Quantity.Add(context.Pizzas.Single(o => o.Id == id).Id, 1);
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+                fetchResult.Message = $"Created new cart for {context.Restaurants.Single(o => o.Id == restaurantId).Name} and added {cart.Pizzas.Last().Name} to the cart";
             } else
             {
-                var cart = SessionHelper.GetObjectFromJson<List<OrderItem>>(HttpContext.Session, "cart");
-                int index = isExist(id);
-                if(index != -1)
+                var cart = SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart");
+                string pizzaId = isExist(id);
+                if(pizzaId != null)
                 {
-                    cart[index].Quantity++;
+                    cart.Quantity[pizzaId]++;
                 } else
-                {
-                    cart.Add(new OrderItem { Pizza = context.Pizzas.Single(o => o.Id == id), Quantity = 1 });
+                {                  
+                    cart.Pizzas.Add(context.Pizzas.Single(o => o.Id == id));
+                    cart.Quantity.Add(context.Pizzas.Single(o => o.Id == id).Id, 1);
                 }
                 SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             }
-            return RedirectToAction("Index");
+            fetchResult.Success = true;
+            fetchResult.StatusCode = 200;
+            return fetchResult;
         }
 
         public IActionResult Remove(string id)
         {
-            var cart = SessionHelper.GetObjectFromJson<List<OrderItem>>(HttpContext.Session, "cart");
-            int index = isExist(id);
-            cart.RemoveAt(index);
+            var cart = SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart");
+            string pizzaId = isExist(id);
+            cart.Pizzas.Remove(cart.Pizzas.Single(o => o.Id == pizzaId));
+            cart.Quantity[pizzaId] = cart.Quantity[pizzaId] - 1;
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
             return RedirectToAction("Index");
         }
 
-        private int isExist(string id)
+        private string isExist(string id)
         {
-            List<OrderItem> cart = SessionHelper.GetObjectFromJson<List<OrderItem>>(HttpContext.Session, "cart");
-            for (int i = 0; i < cart.Count; i++)
+            OrderItems cart = SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart");
+            for (int i = 0; i < cart.Pizzas.Count; i++)
             {
-                if (cart[i].Pizza.Id.Equals(id))
+                if (cart.Pizzas[i].Id.Equals(id))
                 {
-                    return i;
+                    return cart.Pizzas[i].Id;
                 }
             }
-            return -1;
+            return null;
         }
     }
 }

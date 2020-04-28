@@ -36,7 +36,7 @@
                     <tr>
                         <td>@pizza.Name</td>
                         <td>@pizza.Price kr</td>
-                        <td><a asp-controller="cart" asp-action="buy" asp-route-id="@pizza.Id" class="btn-sm btn-success">Buy Now</a></td>
+                        <td><a asp-controller="cart" asp-action="buy" asp-route-id="@pizza.Id" asp-route-restaurantId="@Model.Id" class="btn-sm btn-success">Buy Now</a></td>
                     </tr>
                 }
             }
