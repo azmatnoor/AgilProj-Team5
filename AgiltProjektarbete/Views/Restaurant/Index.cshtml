@@ -26,6 +26,8 @@
             </tr>
         </thead>
         <tbody>
+
+
             @if (@Model.Menu != null && @Model.Menu.Count() > 0)
             {
                 @foreach (var pizza in @Model.Menu)
@@ -33,8 +35,7 @@
                     <tr>
                         <td>@pizza.Name</td>
                         <td>@pizza.Price kr</td>
-                        <td><button class="btn btn-success" onclick="Buy('@pizza.Id', '@pizza.RestaurantId')">Add to cart</button></td>
-                        <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-whatever="@pizza.RestaurantId">Add ingredients</button></td>
+                        <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-pizzaid="@pizza.Id">Add ingredients</button></td>
                     </tr>
                 }
             }
@@ -117,23 +118,54 @@
 @section scripts {
     <script>
         function Buy(pizzaId, restaurantId) {
-            fetch("/Cart/Buy", {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    id: pizzaId,
-                    restaurantId: restaurantId
-                })
-            }).then((response) => response.json() ).then((jsonResponse) => {
-                console.log(jsonResponse.content);
-                if (jsonResponse.statusCode == 200) {
-                    let span = document.getElementById("responseSpan");
-                    span.innerHTML = jsonResponse.content;
-                }
-            });
+            return () => {
+                fetch("/Cart/Buy", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: pizzaId,
+                        restaurantId: restaurantId,
+                        ingredientId:  DumpInArray(),
+                        })
+                }).then((response) => response.json()).then((jsonResponse) => {
+                    console.log(jsonResponse.content);
+                    if (jsonResponse.statusCode == 200) {
+                        let span = document.getElementById("responseSpan");
+                        span.innerHTML = jsonResponse.content;
+                    }
+                });
+            }
+     
         }
+
+
+        function DumpInArray() {
+                var arr = [];
+                $('.modal-choices input[type="checkbox"]:checked').each(function () {
+                    arr.push($(this).val());
+                });
+                return arr;
+        }
+
+        $('#ingredientsModal').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('pizzaid') // Extract info from data-* attributes
+
+            var modal = $(this)
+            modal.find('.modal-title').text('New message to ' + recipient)
+            
+            var r = $('<input/>').attr({
+                type: "button",
+                id: "buybtn",
+                value: 'Add to cart',
+                class: "btn btn-info"
+            });
+            modal.find('.modal-footer').html(r);
+            document.getElementById('buybtn').onclick = Buy(recipient, '@Model.Id');
+        })
+
     </script>
 }
 <div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -146,12 +178,22 @@
                 </button>
             </div>
             <div class="modal-body">
-                ...
+                <div class="modal-choices">
+                    <div class="modal-col-1">
+                        <ul>
+                            @foreach (var ingredient in @Model.Ingredients)
+                            {
+                                <li>
+                                    <label>@ingredient.IngredientType </label>
+                                    <input type="checkbox" value=@ingredient.Id />
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                    
+
+                    <div class="modal-footer"></div>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
-        </div>
     </div>
 </div>
