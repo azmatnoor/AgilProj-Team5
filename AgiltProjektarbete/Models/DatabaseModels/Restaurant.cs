@@ -15,7 +15,7 @@ namespace AgiltProjektarbete
         public virtual ICollection<Pizza> Menu { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
         [NotMapped]
-        public List<string> Ingredients { get; set; }
+        public List<Ingredient> Ingredients { get; set; }
         [Required]
         
 
