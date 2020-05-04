@@ -1,10 +1,17 @@
 ﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Mvc
+
 @inject SignInManager<User> SignInManager
 @inject UserManager<User> UserManager
 @inject ApplicationContext context 
 
-
     <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-dark" asp-controller="Cart" asp-action="Index"
+               title="Welcome">
+                My Cart
+            </a>
+        </li>
         @if (User.Identity.IsAuthenticated && User.IsInRole(Role.RestaurantOwner.ToString()))
         {
             if (context.Restaurants.Where(o => o.Owner == UserManager.GetUserAsync(User).Result).Count() > 0)

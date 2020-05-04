@@ -3,38 +3,48 @@
     ViewData["Title"] = "Index";
     int total = 0;
 }
+@if (Model != null)
+{
+    <h4>@Model.Restaurant.Name</h4>
+    <table class="table">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Sub total</th>
+            <th scope="col"> </th>
+        </tr>
+        @foreach (var item in @Model.Pizzas)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td>@Model.Quantity[@item.Id]</td>
+                <td>@(@item.Price * @Model.Quantity[@item.Id])</td>
+                <td><a asp-action="remove" asp-route-id="@item.Id" class="btn btn-danger">Remove</a></td>
+            </tr>
+        }
+        <tr>
+            <td scope="col">
+                @for (int i = 0; i < @Model.Pizzas.Count; i++)
+                {
+                    total += (@Model.Pizzas[i].Price * @Model.Quantity[@Model.Pizzas[i].Id]);
+                }
+                Total: @total
+            </td>
+        </tr>
+    </table>
+    <br />
+    <div class="mb-3">
+        <button class="btn btn-dark" type="button">
+            Order from @Model.Restaurant.Name
+        </button>
+    </div>
 
-<h1>Cart</h1>
-<table class="table">
-    <tr>
-        <th scope="col">Name</th>
-        <th scope="col">Price</th>
-        <th scope="col">Quantity</th>
-        <th scope="col">Sub total</th>
-        <th scope="col"> </th>
-    </tr>
-    @foreach (var item in @Model.Pizzas)
-    {
-    <tr>
-    <td>@item.Name</td>
-    <td>@item.Price</td>
-    <td>@Model.Quantity[@item.Id]</td>
-    <td>@(@item.Price * @Model.Quantity[@item.Id])</td>
-    <td><a asp-action="remove" asp-route-id="@item.Id" class="btn btn-danger">Remove</a></td>
-    </tr>
-    }
-    <tr>
-        <td scope="col">
-            @for (int i = 0; i < @Model.Pizzas.Count; i++)
-            {
-                total += (@Model.Pizzas[i].Price * @Model.Quantity[@Model.Pizzas[i].Id]);
-            }
-            Total: @total
-        </td>
-    </tr>
-</table>
-<br />
-<a asp-controller="Order" asp-action="Order" class="btn btn-dark mb-3">Order</a>
-<br />
+}
+else
+{
+    <h3 class="text-center mx-auto">Nothing in cart</h3>
+}
 <a asp-controller="Home" asp-action="Index" class="btn btn-dark">Back to home</a>
 
