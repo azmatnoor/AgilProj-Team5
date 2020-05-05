@@ -19,6 +19,26 @@ namespace AgiltProjektarbete.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AgiltProjektarbete.Ingredient", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnName("id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IngredientType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<string>("RestaurantId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ingredients");
+                });
+
             modelBuilder.Entity("AgiltProjektarbete.Order", b =>
                 {
                     b.Property<string>("Id")
@@ -79,11 +99,17 @@ namespace AgiltProjektarbete.Migrations
                         .HasColumnName("id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("OwnerId")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PricePerKilometer")
                         .HasColumnType("int");
@@ -204,15 +230,15 @@ namespace AgiltProjektarbete.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d352f9d7-43fc-4d7d-8e8b-1b9cfdd2563a",
-                            ConcurrencyStamp = "a565aaf6-a231-47e9-b8a3-5a52e025c708",
+                            Id = "da74daa4-7a4c-4ec2-bba9-1827e41246a4",
+                            ConcurrencyStamp = "be3d12f0-72a7-41f8-8cae-98cbc80e0937",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "a27a31ce-b2cf-447d-8bcb-8e6d8d6ea3a6",
-                            ConcurrencyStamp = "d5bf9fea-f49a-4ad3-8eff-128ec1fc7908",
+                            Id = "213bdacc-aeed-40b5-a437-541e92a1088b",
+                            ConcurrencyStamp = "bebd831f-fac4-4a59-b38f-b8a2f625d82c",
                             Name = "RestaurantOwner",
                             NormalizedName = "RESTAURANTOWNER"
                         });

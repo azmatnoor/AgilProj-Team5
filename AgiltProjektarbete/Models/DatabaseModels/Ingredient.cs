@@ -6,13 +6,11 @@ using System.Threading.Tasks;
 
 namespace AgiltProjektarbete
 {
-    public class Pizza
+    public class Ingredient
     {
         [Column("id")]
         public virtual string Id { get; set; }
-        public string Name { get; set; }
-        [NotMapped]
-        public List<Ingredient> Ingredients { get; set; }
+        public string IngredientType { get; set; }
         public int Price { get; set; }
         public string RestaurantId { get; set; }
     }
