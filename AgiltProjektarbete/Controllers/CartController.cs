@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http.Headers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgiltProjektarbete
@@ -25,12 +28,29 @@ namespace AgiltProjektarbete
             }
             else
             {
+                
+                var ingredients = new List<Ingredient>();
+                foreach (var ingredient in model.IngredientId)
+                {
+                    ingredients.Add(context.Ingredients.Single(i => i.Id == ingredient));
+                }
+                var modelPizza = context.Pizzas.Single(x => x.Id == model.Id);
+
+                var pizza = new Pizza
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = modelPizza.Name,
+                    Price = modelPizza.Price + ingredients.Sum(x => x.Price),
+                    Ingredients = ingredients,
+                    RestaurantId = model.RestaurantId
+                };
+
                 if (SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart") == null)
                 {
                     var cart = new OrderItems();
                     cart.Restaurant = context.Restaurants.Single(o => o.Id == model.RestaurantId);
-                    cart.Pizzas.Add(context.Pizzas.Single(o => o.Id == model.Id));
-                    cart.Quantity.Add(context.Pizzas.Single(o => o.Id == model.Id).Id, 1);
+                    cart.Pizzas.Add(pizza);
+                    cart.Quantity.Add(pizza.Id, 1);
                     SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
                     return Json(new { StatusCode = 200, Content = $"Created cart and added {cart.Pizzas.Last().Name}" });
                 }
@@ -46,8 +66,8 @@ namespace AgiltProjektarbete
                     }
                     else
                     {
-                        cart.Pizzas.Add(context.Pizzas.Single(o => o.Id == model.Id));
-                        cart.Quantity.Add(context.Pizzas.Single(o => o.Id == model.Id).Id, 1);
+                        cart.Pizzas.Add(pizza);
+                        cart.Quantity.Add(pizza.Id, 1);
                         SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
                         return Json(new { StatusCode = 200, Content = $"Added {cart.Pizzas.Last().Name}" });
                     }
