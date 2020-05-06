@@ -107,6 +107,7 @@
         </div>
     </div>
 }
+
 <form asp-controller="Home" asp-action="Index">
     <div class="mb-3 float-left">
         <button class="btn btn-dark" type="submit">
@@ -115,64 +116,11 @@
     </div>
 </form>
 
-@section scripts {
-    <script>
-        function Buy(pizzaId, restaurantId) {
-            return () => {
-                fetch("/Cart/Buy", {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        id: pizzaId,
-                        restaurantId: restaurantId,
-                        ingredientId:  DumpInArray(),
-                        })
-                }).then((response) => response.json()).then((jsonResponse) => {
-                    console.log(jsonResponse.content);
-                    if (jsonResponse.statusCode == 200) {
-                        let span = document.getElementById("responseSpan");
-                        span.innerHTML = jsonResponse.content;
-                    }
-                });
-            }
-     
-        }
-
-
-        function DumpInArray() {
-                var arr = [];
-                $('.modal-choices input[type="checkbox"]:checked').each(function () {
-                    arr.push($(this).val());
-                });
-                return arr;
-        }
-
-        $('#ingredientsModal').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget) // Button that triggered the modal
-            var recipient = button.data('pizzaid') // Extract info from data-* attributes
-
-            var modal = $(this)
-            modal.find('.modal-title').text('New message to ' + recipient)
-            
-            var r = $('<input/>').attr({
-                type: "button",
-                id: "buybtn",
-                value: 'Add to cart',
-                class: "btn btn-info"
-            });
-            modal.find('.modal-footer').html(r);
-            document.getElementById('buybtn').onclick = Buy(recipient, '@Model.Id');
-        })
-
-    </script>
-}
 <div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Select ingredients</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -184,16 +132,68 @@
                             @foreach (var ingredient in @Model.Ingredients)
                             {
                                 <li>
-                                    <label>@ingredient.IngredientType </label>
-                                    <input type="checkbox" value=@ingredient.Id />
+                                    <span>@ingredient.Price kr </span>
+                                    <input type="checkbox" value='@ingredient.Id' />
+                                    <label>@ingredient.IngredientType</label>
                                 </li>
                             }
                         </ul>
                     </div>
-                    
-
                     <div class="modal-footer"></div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
+
+@section scripts {
+    <script>
+    function Buy(pizzaId, restaurantId) {
+        return () => {
+            fetch("/Cart/Buy", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    id: pizzaId,
+                    restaurantId: restaurantId,
+                    ingredientId:  DumpInArray(),
+                    })
+            }).then((response) => response.json()).then((jsonResponse) => {
+                console.log(jsonResponse.content);
+                if (jsonResponse.statusCode == 200) {
+                    let span = document.getElementById("responseSpan");
+                    span.innerHTML = jsonResponse.content;
+                }
+            });
+        }
+    }
+
+    function DumpInArray() {
+            var arr = [];
+            $('.modal-choices input[type="checkbox"]:checked').each(function () {
+                arr.push($(this).val());
+            });
+            return arr;
+    }
+
+    $('#ingredientsModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button that triggered the modal
+        var recipient = button.data('pizzaid') // Extract info from data-* attributes
+
+        var modal = $(this)
+        var r = $('<input/>').attr({
+            type: "button",
+            id: "buybtn",
+            value: 'Add to cart',
+            class: "btn btn-info"
+        });
+        modal.find('.modal-footer').html(r);
+        document.getElementById('buybtn').onclick = Buy(recipient, '@Model.Id');
+        document.getElementById('buybtn').setAttribute("data-dismiss", "modal");
+    })
+
+    </script>
+}
+

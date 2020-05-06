@@ -25,7 +25,10 @@
                     Ingredients
                 </dt>
                 <dd class="col-sm-10">
-                    @*@pizza.Ingredients.ToString()*@
+                    @foreach (var ingredient in pizza.Ingredients)
+                    {
+                    <span>@ingredient.IngredientType, </span>
+                    }
                 </dd>
                 <dt class="col-sm-2">
                     Price

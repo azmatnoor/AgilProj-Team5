@@ -230,15 +230,15 @@ namespace AgiltProjektarbete.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "da74daa4-7a4c-4ec2-bba9-1827e41246a4",
-                            ConcurrencyStamp = "be3d12f0-72a7-41f8-8cae-98cbc80e0937",
+                            Id = "ae353364-2451-4310-8585-cac859cb5606",
+                            ConcurrencyStamp = "2e18b641-20ba-47e5-b056-660b81a63477",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "213bdacc-aeed-40b5-a437-541e92a1088b",
-                            ConcurrencyStamp = "bebd831f-fac4-4a59-b38f-b8a2f625d82c",
+                            Id = "caaf630a-f4fe-43f1-8bb8-679abaffcd8e",
+                            ConcurrencyStamp = "a42fc0e5-4d87-4e3f-9f48-14713fc003f1",
                             Name = "RestaurantOwner",
                             NormalizedName = "RESTAURANTOWNER"
                         });
