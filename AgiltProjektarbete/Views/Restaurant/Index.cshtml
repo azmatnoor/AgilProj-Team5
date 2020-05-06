@@ -22,7 +22,10 @@
             <tr>
                 <th scope="col">Pizza</th>
                 <th scope="col">Price</th>
-                <th scope="col"></th>
+                @if(Model.Owner == null)
+                {
+                    <th scope="col"></th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -35,7 +38,10 @@
                     <tr>
                         <td>@pizza.Name</td>
                         <td>@pizza.Price kr</td>
-                        <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-pizzaid="@pizza.Id">Add ingredients</button></td>
+                        @if(@Model.Owner == null)
+                        {
+                            <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-pizzaid="@pizza.Id">Add to cart</button></td>
+                        }
                     </tr>
                 }
             }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,9 +14,11 @@ namespace AgiltProjektarbete
             this.context = context;
             this.userManager = userManager;
         }
-        public IActionResult Index(string id)
+
+        [HttpGet]
+        public IActionResult Index([FromRoute]string id)
         {
-            return View(DateTime.Now.AddMinutes(2));
+            return View(context.Orders.Single(o => o.Id == id).DeliveryTime);
         }
 
         public IActionResult ConfirmOrder()
@@ -31,7 +32,8 @@ namespace AgiltProjektarbete
                 Customer = userManager.GetUserAsync(User).Result,
                 Pizzas = cart.Pizzas,
                 totalPrice = cart.Pizzas.Sum(p => p.Price),
-                Status = "Waiting for confirmation"
+                DeliveryTime = DateTime.Now.AddMinutes(25),
+                Status = "Confirmed"
             });
             context.SaveChanges();
             var order = context.Orders.Single(o => o.Id == id);

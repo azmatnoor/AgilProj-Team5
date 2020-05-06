@@ -15,5 +15,6 @@ namespace AgiltProjektarbete
         public List<Ingredient> Ingredients { get; set; }
         public int Price { get; set; }
         public string RestaurantId { get; set; }
+        public bool InMenu { get; set; }
     }
 }

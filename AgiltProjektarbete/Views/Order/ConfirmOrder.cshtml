@@ -27,7 +27,7 @@
                 <dd class="col-sm-10">
                     @foreach (var ingredient in pizza.Ingredients)
                     {
-                    <span>@ingredient.IngredientType, </span>
+                        <span>@ingredient.IngredientType, </span>
                     }
                 </dd>
                 <dt class="col-sm-2">
@@ -43,3 +43,11 @@
 <span>Sub Total: @Model.totalPrice</span>
 <br />
 <span>Payment method: None</span>
+
+@section scripts{
+    <script>
+    window.setTimeout(function(){
+    window.location.href= '@(Url.Action("Index", "Order", new { @Model.Id}))';
+    }, 3000);
+    </script>
+}
