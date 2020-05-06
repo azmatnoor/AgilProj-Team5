@@ -17,27 +17,25 @@ namespace AgiltProjektarbete
         }
         public IActionResult Index(string id)
         {
-            return View();
+            return View(DateTime.Now.AddMinutes(2));
         }
 
         public IActionResult ConfirmOrder()
         {
             var cart = SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart");
-            var order = new Order
+            var restaurant = context.Restaurants.Single(o => o.Id == cart.Restaurant.Id);
+            var id = Guid.NewGuid().ToString();
+            restaurant.Orders.Add(new Order
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = id,
                 Customer = userManager.GetUserAsync(User).Result,
                 Pizzas = cart.Pizzas,
-                Restaurant = cart.Restaurant,
                 totalPrice = cart.Pizzas.Sum(p => p.Price),
                 Status = "Waiting for confirmation"
-            };
+            });
+            context.SaveChanges();
+            var order = context.Orders.Single(o => o.Id == id);
             return View(order);
-        }
-
-        public IActionResult AddOrder(OrderItems model)
-        {
-            return RedirectToAction("Index");
         }
     }
 }
