@@ -144,5 +144,32 @@ namespace AgiltProjektarbete
             context.SaveChanges();
             return RedirectToAction("Index");
         }
+
+        [Authorize(Roles = "RestaurantOwner")]
+        [HttpPost]
+        public async Task<IActionResult> AddIngredients(CreateMenuModel model)
+        {
+            if (model.Ingredient != null)
+            {
+                var ingredient = model.Ingredient;
+                ingredient.Id = Guid.NewGuid().ToString();
+                ingredient.RestaurantId = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First().Id;
+                if (context.Ingredients.Where(o => o.RestaurantId == ingredient.RestaurantId).Count() < 1)
+                {
+                    context.Ingredients.Add(ingredient);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError("1337", "A ingredient with that name already exists.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("800815", "You need to add something.");
+            }
+
+            return RedirectToAction("EditMenu");
+        }
     }
 }
