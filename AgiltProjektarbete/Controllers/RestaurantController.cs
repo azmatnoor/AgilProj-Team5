@@ -31,18 +31,18 @@ namespace AgiltProjektarbete
                 restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).Single();
             }
 
-            restaurant.Menu = await context.Pizzas.Where(p => p.RestaurantId == restaurant.Id && p.InMenu == true).ToListAsync();
+            restaurant.Menu = await context.Pizzas.Where(p => p.RestaurantId == restaurant.Id && p.InMenu).ToListAsync();
             restaurant.Ingredients = await context.Ingredients.Where(p => p.RestaurantId == restaurant.Id).ToListAsync();
             return View(restaurant);
         }
 
         [Authorize(Roles="RestaurantOwner")]
         [HttpGet]
-        public async Task<IActionResult> EditMenu()
+        public IActionResult EditMenu()
         {
             var model = new CreateMenuModel();
             model.Restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
-            model.CurrentMenu = context.Pizzas.Where(o => o.RestaurantId == model.Restaurant.Id).ToList();
+            model.CurrentMenu = context.Pizzas.Where(o => o.RestaurantId == model.Restaurant.Id && o.InMenu).ToList();
 
             if(model.Restaurant != null)
             {
@@ -137,7 +137,7 @@ namespace AgiltProjektarbete
 
         [Authorize(Roles = "RestaurantOwner")]
         [HttpPost]
-        public async Task<IActionResult> UpdateRestaurantInfo(Restaurant restaurant)
+        public IActionResult UpdateRestaurantInfo(Restaurant restaurant)
         {
             restaurant.Id = context.Restaurants.AsNoTracking().Where(x => x.Owner.Id == userManager.GetUserAsync(User).Result.Id).First().Id;
             context.Restaurants.Update(restaurant);
