@@ -43,8 +43,9 @@ namespace AgiltProjektarbete
             var model = new CreateMenuModel();
             model.Restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
             model.CurrentMenu = context.Pizzas.Where(o => o.RestaurantId == model.Restaurant.Id).ToList();
+            model.CurrentIngredients = context.Ingredients.Where(o => o.RestaurantId == model.Restaurant.Id).ToList();
 
-            if(model.Restaurant != null)
+            if (model.Restaurant != null)
             {
                 return View(model);
             } else
@@ -154,6 +155,7 @@ namespace AgiltProjektarbete
                 var ingredient = model.Ingredient;
                 ingredient.Id = Guid.NewGuid().ToString();
                 ingredient.RestaurantId = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First().Id;
+                ingredient.InMenu = true;
                 if (context.Ingredients.Where(o => o.RestaurantId == ingredient.RestaurantId).Count() < 1)
                 {
                     context.Ingredients.Add(ingredient);

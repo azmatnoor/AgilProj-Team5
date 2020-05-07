@@ -4,14 +4,16 @@ using AgiltProjektarbete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AgiltProjektarbete.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20200507075816_SomeFixes")]
+    partial class SomeFixes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,15 +241,15 @@ namespace AgiltProjektarbete.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6ff0f3d3-e1cb-4c76-98f7-9ff51a3361b6",
-                            ConcurrencyStamp = "66dbadb1-4a12-4206-bb8c-3e865c8c8e4d",
+                            Id = "6f293941-9696-4552-ac61-2f68515869ef",
+                            ConcurrencyStamp = "d9a964ce-9bc6-4068-9dd5-56f43e5ebbae",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "e308e615-4133-40d4-9d75-ef937899adcb",
-                            ConcurrencyStamp = "17b24b32-5600-4d44-b2af-bdbd75d31b13",
+                            Id = "d1695c55-8abb-4889-af9c-7d4a37264a08",
+                            ConcurrencyStamp = "d1c5ef6c-e56b-4142-bcdb-cd94ba27fbc6",
                             Name = "RestaurantOwner",
                             NormalizedName = "RESTAURANTOWNER"
                         });

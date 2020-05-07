@@ -8,6 +8,7 @@ namespace AgiltProjektarbete
         public Restaurant Restaurant { get; set; }
         public List<Pizza> CurrentMenu { get; set; }
         public Ingredient Ingredient { get; set; }
+        public List<Ingredient> CurrentIngredients { get; set; }
 
     }
 }

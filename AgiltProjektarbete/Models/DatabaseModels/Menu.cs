@@ -10,6 +10,8 @@ namespace AgiltProjektarbete
         public virtual string Id { get; set; }
         public virtual ICollection<Pizza> Pizzas { get; set; }
         [ForeignKey("Id")]
+        public virtual ICollection<Ingredient> Ingredients { get; set; }
+        [ForeignKey("Id")]
         public virtual Restaurant Restaurant { get; set; }
     }
 }
