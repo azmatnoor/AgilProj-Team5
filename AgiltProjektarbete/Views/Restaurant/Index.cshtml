@@ -22,7 +22,7 @@
             <tr>
                 <th scope="col">Pizza</th>
                 <th scope="col">Price</th>
-                @if(Model.Owner == null)
+                @if (Model.Owner == null)
                 {
                     <th scope="col"></th>
                 }
@@ -38,7 +38,7 @@
                     <tr>
                         <td>@pizza.Name</td>
                         <td>@pizza.Price kr</td>
-                        @if(@Model.Owner == null)
+                        @if (@Model.Owner == null)
                         {
                             <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-pizzaid="@pizza.Id">Add to cart</button></td>
                         }
@@ -112,6 +112,8 @@
             </form>
         </div>
     </div>
+
+    <div id="chart_div"></div>
 }
 
 <form asp-controller="Home" asp-action="Index">
@@ -151,6 +153,8 @@
         </div>
     </div>
 </div>
+
+
 
 @section scripts {
     <script>
@@ -200,6 +204,34 @@
         document.getElementById('buybtn').setAttribute("data-dismiss", "modal");
     })
 
+    </script>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        async function drawChart() {
+
+            var fetchData = await fetch("api/soldpizzas/@Html.Raw(@Model.Id)").then((response) => response.json());
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Type');
+            data.addColumn('number', 'Times ordered');
+            data.addRows(fetchData.map(d => Array.from(Object.values(d))));
+
+            var options = {
+                'title': 'Most sold pizza',
+                'legend' : 'left',
+                'width': 800,
+                'height': 600,
+                'is3D' : true
+            };
+
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
     </script>
 }
 

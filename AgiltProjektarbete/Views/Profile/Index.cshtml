@@ -57,12 +57,15 @@
         // draws it.
         async function drawChart() {
             // Create the data table.
+           
             var fetchData = await fetch("api/pizzas/@Html.Raw(@Model.Id)").then((response) => response.json());
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Type');
             data.addColumn('number', 'Times ordered');
+            console.log(fetchData);
             data.addRows(fetchData.map(d => Array.from(Object.values(d))));
-
+            
+           // 
             // Set chart options
             var options = {
                 'title': 'Which is my favourite pizza?',

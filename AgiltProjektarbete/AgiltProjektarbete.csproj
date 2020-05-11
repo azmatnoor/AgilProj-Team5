@@ -12,6 +12,8 @@
     <Compile Remove="Migrations\20200507082840_orderIdOnPizza.Designer.cs" />
     <Compile Remove="Migrations\20200507082941_orderIdOnPizza.cs" />
     <Compile Remove="Migrations\20200507082941_orderIdOnPizza.Designer.cs" />
+    <Compile Remove="Migrations\20200507112849_deliveryTime.cs" />
+    <Compile Remove="Migrations\20200507112849_deliveryTime.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

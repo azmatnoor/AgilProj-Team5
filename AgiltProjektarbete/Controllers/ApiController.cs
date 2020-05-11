@@ -19,17 +19,29 @@ namespace AgiltProjektarbete.Controllers
         //Emil M API
         [Route("{controller}/pizzas/{id}")]
         [HttpGet]
-        public IEnumerable<GoogleChartParsed> Pizzas(string id)
+        public ActionResult Pizzas(string id)
         {
-            var orders = context.Orders.Where(o => o.Customer.Id == id).ToList();;
-            var parsedOrders = new List<GoogleChartParsed>();
+            var orders = context.Orders.Where(o => o.Customer.Id == id).ToList();
+            var pizzas = new List<Pizza>();
             foreach (var order in orders)
             {
-                order.Pizzas = context.Pizzas.Where(o => o.OrderId == order.Id).ToList();
-                var groupedOrders = order.Pizzas.GroupBy(m => m.Name).Select(m => new GoogleChartParsed { Key = m.Key, Value = m.Count() });
-                parsedOrders.AddRange(groupedOrders);
+                pizzas.AddRange(context.Pizzas.Where(o => o.OrderId == order.Id).ToList());
             }
-            return parsedOrders.GroupBy(m => m.Key).Select(m => new GoogleChartParsed { Key = m.Key, Value = m.Count() }).ToList();
+            return Json(pizzas.GroupBy(p => p.Name).Select(p => new GoogleChartParsed { Key = p.Key, Value = p.Count() }).ToList());    
+        }
+
+        //Alex
+        [Route("{controller}/soldpizzas/{id}")]
+        [HttpGet]
+        public ActionResult SoldPizzas(string id)
+        {
+            var orders = context.Orders.Where(o => o.Restaurant.Id == id).ToList();
+            var pizzas = new List<Pizza>();
+            foreach (var order in orders)
+            {
+                pizzas.AddRange(context.Pizzas.Where(o => o.OrderId == order.Id).ToList());
+            }
+            return Json(pizzas.GroupBy(p => p.Name).Select(p => new GoogleChartParsed { Key = p.Key, Value = p.Count() }).ToList());
         }
     }
 }
