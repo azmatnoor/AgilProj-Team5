@@ -30,12 +30,12 @@
     <br />
     @if(Model.Pizzas.Count() > 0)
     {
-        <a asp-controller="Order" asp-action="ConfirmOrder" class="btn btn-dark">Order</a>
+        <a asp-controller="Order" asp-action="ConfirmOrder" class="btn btn-success">Order</a>
     }
 }
 else
 {
     <h3 class="text-center mx-auto">Nothing in cart</h3>
 }
-<a asp-controller="Home" asp-action="Index" class="btn btn-dark">Back to home</a>
+<a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Back to home</a>
 

@@ -120,9 +120,10 @@
                             @foreach (var ingredient in @Model.Ingredients)
                             {
                                 <li>
-                                    <span>@ingredient.Price kr </span>
-                                    <input type="checkbox" value='@ingredient.Id' />
-                                    <label>@ingredient.IngredientType</label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="@ingredient.Id.ToString()" value="@ingredient.Id">
+                                        <label class="custom-control-label" for="@ingredient.Id.ToString()">@ingredient.IngredientType</label>
+                                    </div>
                                 </li>
                             }
                         </ul>
