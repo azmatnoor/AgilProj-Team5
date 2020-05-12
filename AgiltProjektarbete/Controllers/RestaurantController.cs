@@ -33,6 +33,7 @@ namespace AgiltProjektarbete
 
             restaurant.Menu = await context.Pizzas.Where(p => p.RestaurantId == restaurant.Id && p.InMenu).ToListAsync();
             restaurant.Ingredients = await context.Ingredients.Where(p => p.RestaurantId == restaurant.Id).ToListAsync();
+            restaurant.RestaurantReviews = await context.RestaurantReviews.Where(o => o.Restaurant.Id == restaurant.Id).ToListAsync();
             return View(restaurant);
         }
 

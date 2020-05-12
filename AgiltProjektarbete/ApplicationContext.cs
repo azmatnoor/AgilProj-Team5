@@ -12,6 +12,8 @@ namespace AgiltProjektarbete
         public DbSet<Order> Orders { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
+        public DbSet<RestaurantReview> RestaurantReviews { get; set; }
+        public DbSet<CustomerReview> CustomerReviews { get; set; }
 
         public ApplicationContext(DbContextOptions options) : base(options)
         {

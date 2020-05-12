@@ -19,6 +19,29 @@ namespace AgiltProjektarbete.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AgiltProjektarbete.CustomerReview", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AuthorId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.ToTable("CustomerReviews");
+                });
+
             modelBuilder.Entity("AgiltProjektarbete.Ingredient", b =>
                 {
                     b.Property<string>("Id")
@@ -130,6 +153,32 @@ namespace AgiltProjektarbete.Migrations
                     b.ToTable("Restaurants");
                 });
 
+            modelBuilder.Entity("AgiltProjektarbete.RestaurantReview", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Author")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Message")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RestaurantId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RestaurantId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RestaurantReviews");
+                });
+
             modelBuilder.Entity("AgiltProjektarbete.User", b =>
                 {
                     b.Property<string>("Id")
@@ -236,15 +285,15 @@ namespace AgiltProjektarbete.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "51771dfd-6ec0-46c5-b765-dc18cae3793a",
-                            ConcurrencyStamp = "f7578b33-3a57-4193-aae7-4b161e182827",
+                            Id = "6b6db1f7-b8e3-4bee-8925-b3a31bf62587",
+                            ConcurrencyStamp = "377a288a-1081-428b-9eed-7790ba8c6cbe",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "3953b63c-f03b-43c4-8411-40b4c8a686c3",
-                            ConcurrencyStamp = "0250977b-c0fb-49f5-b160-68179c27c667",
+                            Id = "87111c31-516e-487a-8a26-b3faa076f262",
+                            ConcurrencyStamp = "a536e042-5e90-4e4c-8ea9-60f0547dda3d",
                             Name = "RestaurantOwner",
                             NormalizedName = "RESTAURANTOWNER"
                         });
@@ -354,6 +403,17 @@ namespace AgiltProjektarbete.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("AgiltProjektarbete.CustomerReview", b =>
+                {
+                    b.HasOne("AgiltProjektarbete.Restaurant", "Author")
+                        .WithMany("CustomerReviews")
+                        .HasForeignKey("AuthorId");
+
+                    b.HasOne("AgiltProjektarbete.User", "Customer")
+                        .WithMany("CustomerReviews")
+                        .HasForeignKey("CustomerId");
+                });
+
             modelBuilder.Entity("AgiltProjektarbete.Order", b =>
                 {
                     b.HasOne("AgiltProjektarbete.User", "Customer")
@@ -381,6 +441,17 @@ namespace AgiltProjektarbete.Migrations
                     b.HasOne("AgiltProjektarbete.User", "Owner")
                         .WithMany()
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("AgiltProjektarbete.RestaurantReview", b =>
+                {
+                    b.HasOne("AgiltProjektarbete.Restaurant", "Restaurant")
+                        .WithMany("RestaurantReviews")
+                        .HasForeignKey("RestaurantId");
+
+                    b.HasOne("AgiltProjektarbete.User", null)
+                        .WithMany("RestaurantReviews")
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

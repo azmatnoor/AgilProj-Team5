@@ -16,11 +16,10 @@ namespace AgiltProjektarbete
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
         [NotMapped]
         public List<Ingredient> Ingredients { get; set; }
-        [Required]
-        
-
+        [Required]       
         public int ZIPCode { get; set; }
         public int PricePerKilometer { get; set; }
-
+        public List<RestaurantReview> RestaurantReviews { get; set; }
+        public List<CustomerReview> CustomerReviews { get; set; }
     }
 }

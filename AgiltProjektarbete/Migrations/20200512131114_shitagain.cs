@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AgiltProjektarbete.Migrations
 {
-    public partial class init : Migration
+    public partial class shitagain : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -194,6 +194,32 @@ namespace AgiltProjektarbete.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CustomerReviews",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    AuthorId = table.Column<string>(nullable: true),
+                    CustomerId = table.Column<string>(nullable: true),
+                    Message = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CustomerReviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CustomerReviews_Restaurants_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Restaurants",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CustomerReviews_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -201,7 +227,8 @@ namespace AgiltProjektarbete.Migrations
                     RestaurantId = table.Column<string>(nullable: true),
                     CustomerId = table.Column<string>(nullable: true),
                     totalPrice = table.Column<int>(nullable: false),
-                    Status = table.Column<string>(nullable: true)
+                    Status = table.Column<string>(nullable: true),
+                    DeliveryTime = table.Column<DateTime>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -221,14 +248,42 @@ namespace AgiltProjektarbete.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "RestaurantReviews",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Author = table.Column<string>(nullable: true),
+                    RestaurantId = table.Column<string>(nullable: true),
+                    Message = table.Column<string>(nullable: true),
+                    UserId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RestaurantReviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RestaurantReviews_Restaurants_RestaurantId",
+                        column: x => x.RestaurantId,
+                        principalTable: "Restaurants",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RestaurantReviews_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pizzas",
                 columns: table => new
                 {
                     id = table.Column<string>(nullable: false),
+                    RestaurantId = table.Column<string>(nullable: true),
+                    OrderId = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
                     Price = table.Column<int>(nullable: false),
-                    RestaurantId = table.Column<string>(nullable: true),
-                    OrderId = table.Column<string>(nullable: true)
+                    InMenu = table.Column<bool>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -250,12 +305,12 @@ namespace AgiltProjektarbete.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "ae353364-2451-4310-8585-cac859cb5606", "2e18b641-20ba-47e5-b056-660b81a63477", "Customer", "CUSTOMER" });
+                values: new object[] { "6b6db1f7-b8e3-4bee-8925-b3a31bf62587", "377a288a-1081-428b-9eed-7790ba8c6cbe", "Customer", "CUSTOMER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "caaf630a-f4fe-43f1-8bb8-679abaffcd8e", "a42fc0e5-4d87-4e3f-9f48-14713fc003f1", "RestaurantOwner", "RESTAURANTOWNER" });
+                values: new object[] { "87111c31-516e-487a-8a26-b3faa076f262", "a536e042-5e90-4e4c-8ea9-60f0547dda3d", "RestaurantOwner", "RESTAURANTOWNER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -297,6 +352,16 @@ namespace AgiltProjektarbete.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CustomerReviews_AuthorId",
+                table: "CustomerReviews",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CustomerReviews_CustomerId",
+                table: "CustomerReviews",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_CustomerId",
                 table: "Orders",
                 column: "CustomerId");
@@ -315,6 +380,16 @@ namespace AgiltProjektarbete.Migrations
                 name: "IX_Pizzas_RestaurantId",
                 table: "Pizzas",
                 column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantReviews_RestaurantId",
+                table: "RestaurantReviews",
+                column: "RestaurantId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RestaurantReviews_UserId",
+                table: "RestaurantReviews",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Restaurants_OwnerId",
@@ -340,10 +415,16 @@ namespace AgiltProjektarbete.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CustomerReviews");
+
+            migrationBuilder.DropTable(
                 name: "Ingredients");
 
             migrationBuilder.DropTable(
                 name: "Pizzas");
+
+            migrationBuilder.DropTable(
+                name: "RestaurantReviews");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

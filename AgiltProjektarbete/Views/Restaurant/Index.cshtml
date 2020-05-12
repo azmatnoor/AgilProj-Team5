@@ -55,6 +55,7 @@
     </table>
 </div>
 
+
 @if (Model.Owner != null)
 {
     <div class="text-center">
@@ -97,12 +98,27 @@
                 <button type="submit" class="btn btn-success">Confirm</button>
             </form>
         </div>
-    </div>  
+    </div>
     <div>
         <div id="chart_div" class="w-50 float-right"></div>
     </div>
 }
+else
+{
+    <div class="form-group w-50">
+        <label>Review for @Model.Name</label>
+        <textarea class="form-control mb-2" id="reviewTextArea" rows="3" placeholder="Enter a review..."></textarea>
+        <button class="btn btn-success" id="publish">Publish</button>
+    </div>
+}
 <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back</a>
+
+<div class="pre-scrollable">
+    @foreach (var item in @Model.RestaurantReviews)
+    {
+        @Html.Partial("_RestaurantReviewPartial", item);
+    }
+</div>
 
 <div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -137,6 +153,8 @@
 
 @section scripts {
     <script>
+        document.getElementById("publish").onclick = HandleReviewSubmit();
+
     function Buy(pizzaId, restaurantId) {
         return () => {
             fetch("/Cart/Buy", {
@@ -165,7 +183,25 @@
                 arr.push($(this).val());
             });
             return arr;
-    }
+        }
+
+        function HandleReviewSubmit() {
+            return () => {
+                console.log("HEJ");
+                let textArea = document.getElementById("reviewTextArea");
+                fetch("/Review/AddReview", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Message: textArea.value,
+                        CustomerReview: false,
+                        RestaurantId: '@Model.Id'
+                    })
+                })
+            }
+        };
 
     $('#ingredientsModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
@@ -181,7 +217,7 @@
         modal.find('.modal-footer').html(r);
         document.getElementById('buybtn').onclick = Buy(recipient, '@Model.Id');
         document.getElementById('buybtn').setAttribute("data-dismiss", "modal");
-    })
+    });
 
     </script>
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AgiltProjektarbete
@@ -11,5 +12,7 @@ namespace AgiltProjektarbete
         public string LastName { get; set; }
         public string Address { get; set; }
         public int ZipCode { get; set; }
+        public List<RestaurantReview> RestaurantReviews { get; set; }
+        public List<CustomerReview> CustomerReviews { get; set; }
     }
 }
