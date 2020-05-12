@@ -97,32 +97,12 @@
                 <button type="submit" class="btn btn-success">Confirm</button>
             </form>
         </div>
+    </div>  
+    <div>
+        <div id="chart_div" class="w-50 float-right"></div>
     </div>
-    <div class="container mt-2 p-0">
-        <p>
-            <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#collapseDeleteRestaurant" aria-expanded="false" aria-controls="collapseDeleteRestaurant">
-                Delete Restaurant
-            </button>
-        </p>
-        <div class="collapse mb-5" id="collapseDeleteRestaurant">
-            <form asp-action="DeleteRestaurant" class="mt-3 border border-danger rounded p-3 w-50">
-                <label for="#deleteCheck">Enter Restaurant Name</label>
-                <input type="text" id="deleteCheck" class="form-control mb-2" />
-                <button type="submit" id="deleteButton" disabled class="btn btn-danger">Delete</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="chart_div"></div>
 }
-
-<form asp-controller="Home" asp-action="Index">
-    <div class="mb-3 float-left">
-        <button class="btn btn-dark" type="submit">
-            Back
-        </button>
-    </div>
-</form>
+<a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back</a>
 
 <div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -136,7 +116,7 @@
             <div class="modal-body">
                 <div class="modal-choices">
                     <div class="modal-col-1">
-                        <ul>
+                        <ul class="">
                             @foreach (var ingredient in @Model.Ingredients)
                             {
                                 <li>
@@ -153,8 +133,6 @@
         </div>
     </div>
 </div>
-
-
 
 @section scripts {
     <script>
@@ -223,9 +201,9 @@
 
             var options = {
                 'title': 'Most sold pizza',
-                'legend' : 'left',
-                'width': 800,
-                'height': 600,
+                'legend': 'left',
+                'width': window.width / 40,
+                'height': window.height / 100,
                 'is3D' : true
             };
 
