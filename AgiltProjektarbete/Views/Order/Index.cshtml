@@ -8,20 +8,37 @@
     <a asp-controller="Home" asp-action="Index" class="btn btn-info">Return to Home</a>
 </div>
 
+<div class="mx-auto text-center m-5">
+    <button id="jokebtn" class="btn btn-warning">Generate funny joke</button>
+    <div class="w-50 mx-auto text-center mt-2" id="joke"></div>
+</div>
+
 @section scripts {
     <script>
-      var countDownDate = new Date('@Model').getTime();
-      var x = setInterval(function() {
-      var now = new Date().getTime();
-      var distance = countDownDate - now;
-      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      document.getElementById("clock").innerHTML = minutes + "m " + seconds + "s ";
-      if (distance < 0) {
-                    clearInterval(x);
-        document.getElementById("clock").innerHTML = "EXPIRED";
-      }
-}, 1000);
+        document.getElementById("jokebtn").onclick = generateFunnyJoke();
+
+        var countDownDate = new Date('@Model').getTime();
+        var x = setInterval(function() {
+        var now = new Date().getTime();
+        var distance = countDownDate - now;
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById("clock").innerHTML = minutes + "m " + seconds + "s ";
+        if (distance < 0) {
+                      clearInterval(x);
+          document.getElementById("clock").innerHTML = "EXPIRED";
+        }
+        }, 1000);
+
+            function generateFunnyJoke() {
+                return () => {
+                    let outputDiv = document.getElementById("joke");
+                    fetch("https://official-joke-api.appspot.com/random_joke").then((response) => response.json()).then((jsonResponse) =>
+                    {
+                        outputDiv.innerHTML = jsonResponse.setup + "... </br></br><strong>" + jsonResponse.punchline + "</strong>";
+                    });
+                }
+            }
     </script>
 }
 
