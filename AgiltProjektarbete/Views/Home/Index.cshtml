@@ -1,18 +1,17 @@
-﻿@model IEnumerable<Restaurant>;
+﻿@model SearchRestaurantModel;
 @{
     ViewData["Title"] = "Home Page";
-    string search = "";
 }
 
 <div class="text-center mx-auto">
     <img src="~/images/pizzalogo.png" alt="Logo" class="img-fluid" />
 </div>
 
-<form asp-action="Index" onsubmit="location.href = '@(Url.Action("Index", "Home", new { search}))'">
+<form asp-action="Index">
     <span class="font-weight-light">Search by zip code</span>
     <div class="input-group mb-3 w-50">
-        <input type="text" class="form-control" value="@search" placeholder="Search by zipcode">
-        <div class="input-group-append">        
+        <input type="text" asp-for="SearchValue" class="form-control" placeholder="Search by zipcode">
+        <div class="input-group-append">
             <button class="btn btn-secondary" type="submit">
                 <i class="fa fa-search"></i>
             </button>
@@ -30,9 +29,9 @@
         </tr>
     </thead>
     <tbody>
-        @if (@Model.Count() > 0)
+        @if (@Model.Restaurants.Count() > 0)
         {
-            @foreach (var restaurant in Model.Select((Value, index) => new { index, Value }))
+            @foreach (var restaurant in Model.Restaurants.Select((Value, index) => new { index, Value }))
             {
                 <tr onclick="location.href = '@(Url.Action("Index", "Restaurant", new { restaurant.Value.Id}))'">
                     <th scope="col">@restaurant.index</th>
@@ -49,9 +48,9 @@
         }
     </tbody>
 </table>
-@if (@Model.Count() > 0)
+@if (@Model.Restaurants.Count() > 0)
 {
-    <span class="font-weight-light">Displaying @Model.Count() results</span>
+    <span class="font-weight-light">Displaying @Model.Restaurants.Count() results</span>
 }
 
 @section Scripts {
