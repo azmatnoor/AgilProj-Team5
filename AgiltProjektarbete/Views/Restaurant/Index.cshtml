@@ -22,7 +22,7 @@
             <tr>
                 <th scope="col">Pizza</th>
                 <th scope="col">Price</th>
-                @if(Model.Owner == null)
+                @if (Model.Owner == null)
                 {
                     <th scope="col"></th>
                 }
@@ -38,7 +38,7 @@
                     <tr>
                         <td>@pizza.Name</td>
                         <td>@pizza.Price kr</td>
-                        @if(@Model.Owner == null)
+                        @if (@Model.Owner == null)
                         {
                             <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-pizzaid="@pizza.Id">Add to cart</button></td>
                         }
@@ -54,6 +54,7 @@
         </tbody>
     </table>
 </div>
+
 
 @if (Model.Owner != null)
 {
@@ -98,29 +99,26 @@
             </form>
         </div>
     </div>
-    <div class="container mt-2 p-0">
-        <p>
-            <button class="btn btn-danger" type="button" data-toggle="collapse" data-target="#collapseDeleteRestaurant" aria-expanded="false" aria-controls="collapseDeleteRestaurant">
-                Delete Restaurant
-            </button>
-        </p>
-        <div class="collapse mb-5" id="collapseDeleteRestaurant">
-            <form asp-action="DeleteRestaurant" class="mt-3 border border-danger rounded p-3 w-50">
-                <label for="#deleteCheck">Enter Restaurant Name</label>
-                <input type="text" id="deleteCheck" class="form-control mb-2" />
-                <button type="submit" id="deleteButton" disabled class="btn btn-danger">Delete</button>
-            </form>
-        </div>
+    <div>
+        <div id="chart_div" class="w-50 float-right"></div>
     </div>
 }
-
-<form asp-controller="Home" asp-action="Index">
-    <div class="mb-3 float-left">
-        <button class="btn btn-dark" type="submit">
-            Back
-        </button>
+else
+{
+    <div class="form-group w-50">
+        <label>Review for @Model.Name</label>
+        <textarea class="form-control mb-2" id="reviewTextArea" rows="3" placeholder="Enter a review..."></textarea>
+        <button class="btn btn-success" id="publish">Publish</button>
     </div>
-</form>
+}
+<a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back</a>
+
+<div class="pre-scrollable">
+    @foreach (var item in @Model.RestaurantReviews)
+    {
+        @Html.Partial("_RestaurantReviewPartial", item);
+    }
+</div>
 
 <div class="modal fade" id="ingredientsModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -134,13 +132,14 @@
             <div class="modal-body">
                 <div class="modal-choices">
                     <div class="modal-col-1">
-                        <ul>
+                        <ul class="">
                             @foreach (var ingredient in @Model.Ingredients)
                             {
                                 <li>
-                                    <span>@ingredient.Price kr </span>
-                                    <input type="checkbox" value='@ingredient.Id' />
-                                    <label>@ingredient.IngredientType</label>
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="@ingredient.Id.ToString()" value="@ingredient.Id">
+                                        <label class="custom-control-label" for="@ingredient.Id.ToString()">@ingredient.IngredientType</label>
+                                    </div>
                                 </li>
                             }
                         </ul>
@@ -154,6 +153,8 @@
 
 @section scripts {
     <script>
+        document.getElementById("publish").onclick = HandleReviewSubmit();
+
     function Buy(pizzaId, restaurantId) {
         return () => {
             fetch("/Cart/Buy", {
@@ -182,7 +183,25 @@
                 arr.push($(this).val());
             });
             return arr;
-    }
+        }
+
+        function HandleReviewSubmit() {
+            return () => {
+                console.log("HEJ");
+                let textArea = document.getElementById("reviewTextArea");
+                fetch("/Review/AddReview", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        Message: textArea.value,
+                        CustomerReview: false,
+                        RestaurantId: '@Model.Id'
+                    })
+                })
+            }
+        };
 
     $('#ingredientsModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) // Button that triggered the modal
@@ -198,8 +217,36 @@
         modal.find('.modal-footer').html(r);
         document.getElementById('buybtn').onclick = Buy(recipient, '@Model.Id');
         document.getElementById('buybtn').setAttribute("data-dismiss", "modal");
-    })
+    });
 
+    </script>
+
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        async function drawChart() {
+
+            var fetchData = await fetch("api/soldpizzas/@Html.Raw(@Model.Id)").then((response) => response.json());
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Type');
+            data.addColumn('number', 'Times ordered');
+            data.addRows(fetchData.map(d => Array.from(Object.values(d))));
+
+            var options = {
+                'title': 'Most sold pizza',
+                'legend': 'left',
+                'width': window.width / 40,
+                'height': window.height / 100,
+                'is3D' : true
+            };
+
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+        }
     </script>
 }
 

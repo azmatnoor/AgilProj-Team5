@@ -5,9 +5,9 @@
 @inject UserManager<User> UserManager
 @inject ApplicationContext context 
 
-    <ul class="navbar-nav">
+    <ul class="navbar-nav navbar-dark">
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Cart" asp-action="Index"
+            <a class="nav-link text-light" asp-controller="Cart" asp-action="Index"
                title="Welcome">
                 My Cart
             </a>
@@ -17,7 +17,7 @@
             if (context.Restaurants.Where(o => o.Owner == UserManager.GetUserAsync(User).Result).Count() > 0)
             {
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-controller="Restaurant" asp-action="Index">
+                    <a class="nav-link text-light" asp-controller="Restaurant" asp-action="Index">
                         My Restaurant
                     </a>
                 </li>
@@ -25,7 +25,7 @@
             else
             {
                 <li class="nav-item">
-                    <a class="nav-link text-dark" asp-controller="Restaurant" asp-action="AddRestaurant">
+                    <a class="nav-link text-light" asp-controller="Restaurant" asp-action="AddRestaurant">
                         Add Restaurant
                     </a>
                 </li>
@@ -34,7 +34,7 @@
         @if (SignInManager.IsSignedIn(User))
         {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Home" asp-action="Index"
+                <a class="nav-link text-light" asp-controller="Profile" asp-action="Index"
                    title="Welcome">
                     My Home
                     <i class="fas fa-user"></i>
@@ -42,18 +42,18 @@
             </li>
             <li class="nav-item">
                 <form class="form-inline" asp-controller="Account" asp-action="Logout">
-                    <button type="submit" class="nav-link btn btn-link text-info">Logout</button>
+                    <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
                 </form>
             </li>
         }
         else
         {
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Account"
+                <a class="nav-link text-light" asp-controller="Account"
                    asp-action="Login">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-dark" asp-controller="Account"
+                <a class="nav-link text-light" asp-controller="Account"
                    asp-action="Register">Register</a>
             </li>
         }

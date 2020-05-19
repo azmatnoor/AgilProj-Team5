@@ -26,6 +26,10 @@ namespace AgiltProjektarbete
             var cart = SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart");
             var restaurant = context.Restaurants.Single(o => o.Id == cart.Restaurant.Id);
             var id = Guid.NewGuid().ToString();
+            foreach (var pizza in cart.Pizzas)
+            {
+                pizza.OrderId = id;
+            }
             restaurant.Orders.Add(new Order
             {
                 Id = id,
