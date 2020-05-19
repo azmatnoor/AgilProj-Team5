@@ -173,5 +173,19 @@ namespace AgiltProjektarbete
 
             return RedirectToAction("EditMenu");
         }
+        [Authorize(Roles = "RestaurantOwner")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteIngredient(string id)
+        {
+            if (id != null)
+            {
+                var user = userManager.GetUserAsync(User).Result;
+                var restaurant = context.Restaurants.Where(o => o.Owner.Id == user.Id).First();
+                context.Ingredients.Remove(context.Ingredients.Where(o => o.RestaurantId == restaurant.Id && o.Id == id).First());
+                await context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("EditMenu");
+        }
     }
 }

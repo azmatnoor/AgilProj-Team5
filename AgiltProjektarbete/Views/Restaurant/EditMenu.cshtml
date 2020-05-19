@@ -34,6 +34,7 @@
                         </td>
                     </tr>
                 }
+
             }
             else
             {
@@ -53,10 +54,15 @@
             {
                 @foreach (var ingredient in @Model.CurrentIngredients)
                 {
-                    <tr>
-                        <td>@ingredient.IngredientType</td>
-                        <td>@ingredient.Price kr</td>
-                    </tr>
+            <tr>
+                <td>@ingredient.IngredientType</td>
+                <td>@ingredient.Price kr</td>
+                <td>
+                    <form method="post">
+                        <button type="submit" asp-action="DeleteIngredient" asp-route-id="@ingredient.Id" class="btn btn-danger float-right"><i class="fa fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
                 }
             }
             else
