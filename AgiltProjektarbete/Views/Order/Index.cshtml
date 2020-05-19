@@ -1,7 +1,27 @@
-﻿
+﻿@model DateTime
 @{
     ViewData["Title"] = "Index";
 }
+<div class="mx-auto text-center">
+    <h1 class="display-4">Your order will arrive in</h1>
+    <h1 id="clock" class="display-3"></h1>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-info">Return to Home</a>
+</div>
 
-<h1>Index</h1>
+@section scripts {
+    <script>
+      var countDownDate = new Date('@Model').getTime();
+      var x = setInterval(function() {
+      var now = new Date().getTime();
+      var distance = countDownDate - now;
+      var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      document.getElementById("clock").innerHTML = minutes + "m " + seconds + "s ";
+      if (distance < 0) {
+                    clearInterval(x);
+        document.getElementById("clock").innerHTML = "EXPIRED";
+      }
+}, 1000);
+    </script>
+}
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,29 +14,30 @@ namespace AgiltProjektarbete
             this.context = context;
             this.userManager = userManager;
         }
-        public IActionResult Index(string id)
+
+        [HttpGet]
+        public IActionResult Index([FromRoute]string id)
         {
-            return View();
+            return View(context.Orders.Single(o => o.Id == id).DeliveryTime);
         }
 
         public IActionResult ConfirmOrder()
         {
             var cart = SessionHelper.GetObjectFromJson<OrderItems>(HttpContext.Session, "cart");
-            var order = new Order
+            var restaurant = context.Restaurants.Single(o => o.Id == cart.Restaurant.Id);
+            var id = Guid.NewGuid().ToString();
+            restaurant.Orders.Add(new Order
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = id,
                 Customer = userManager.GetUserAsync(User).Result,
                 Pizzas = cart.Pizzas,
-                Restaurant = cart.Restaurant,
                 totalPrice = cart.Pizzas.Sum(p => p.Price),
-                Status = "Waiting for confirmation"
-            };
+                DeliveryTime = DateTime.Now.AddMinutes(25),
+                Status = "Confirmed"
+            });
+            context.SaveChanges();
+            var order = context.Orders.Single(o => o.Id == id);
             return View(order);
-        }
-
-        public IActionResult AddOrder(OrderItems model)
-        {
-            return RedirectToAction("Index");
         }
     }
 }

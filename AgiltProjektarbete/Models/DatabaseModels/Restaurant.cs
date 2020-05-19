@@ -13,7 +13,7 @@ namespace AgiltProjektarbete
         public string Phone { get; set; }
         public virtual User Owner { get; set; }
         public virtual ICollection<Pizza> Menu { get; set; }
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
         [NotMapped]
         public List<Ingredient> Ingredients { get; set; }
         [Required]

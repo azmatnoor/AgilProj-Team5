@@ -31,7 +31,7 @@ namespace AgiltProjektarbete
                 restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).Single();
             }
 
-            restaurant.Menu = await context.Pizzas.Where(p => p.RestaurantId == restaurant.Id).ToListAsync();
+            restaurant.Menu = await context.Pizzas.Where(p => p.RestaurantId == restaurant.Id && p.InMenu == true).ToListAsync();
             restaurant.Ingredients = await context.Ingredients.Where(p => p.RestaurantId == restaurant.Id).ToListAsync();
             return View(restaurant);
         }
@@ -62,7 +62,7 @@ namespace AgiltProjektarbete
                 var pizza = model.Pizza;
                 pizza.Id = Guid.NewGuid().ToString();
                 pizza.RestaurantId = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First().Id;
-
+                pizza.InMenu = true;
                 if(context.Pizzas.Where(o => o.RestaurantId == pizza.RestaurantId && o.Name == pizza.Name).Count() < 1)
                 {
                     context.Pizzas.Add(pizza);
