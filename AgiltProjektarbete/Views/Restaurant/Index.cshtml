@@ -187,7 +187,6 @@ else
 
         function HandleReviewSubmit() {
             return () => {
-                console.log("HEJ");
                 let textArea = document.getElementById("reviewTextArea");
                 fetch("/Review/AddReview", {
                     method: 'POST',
@@ -199,7 +198,9 @@ else
                         CustomerReview: false,
                         RestaurantId: '@Model.Id'
                     })
-                })
+                }).then(response => {
+                    if (response.ok) { location.reload() }
+                });
             }
         };
 
