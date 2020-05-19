@@ -1,0 +1,41 @@
+﻿@model OrderItems
+@{
+    ViewData["Title"] = "Index";
+}
+@if (Model != null)
+{
+    <h4>@Model.Restaurant.Name</h4>
+    <table class="table">
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col"> </th>
+        </tr>
+        @foreach (var item in @Model.Pizzas)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.Price</td>
+                <td><a asp-action="remove" asp-route-id="@item.Id" class="btn btn-danger">Remove</a></td>
+            </tr>
+        }
+        <tr>
+            <td scope="col">
+                Pizzas: @Model.Pizzas.Sum(o => o.Price) <br />
+                Ingredients: @Model.Pizzas.Sum(o => o.Ingredients.Sum(i => i.Price))<br />
+                Total: @(@Model.Pizzas.Sum(o => o.Price) + @Model.Pizzas.Sum(o => o.Ingredients.Sum(i => i.Price)))
+            </td>
+        </tr>
+    </table>
+    <br />
+    @if(Model.Pizzas.Count() > 0)
+    {
+        <a asp-controller="Order" asp-action="ConfirmOrder" class="btn btn-dark">Order</a>
+    }
+}
+else
+{
+    <h3 class="text-center mx-auto">Nothing in cart</h3>
+}
+<a asp-controller="Home" asp-action="Index" class="btn btn-dark">Back to home</a>
+

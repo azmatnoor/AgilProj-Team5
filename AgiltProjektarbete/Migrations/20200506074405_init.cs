@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace AgiltProjektarbete.Migrations
 {
-    public partial class insertRole : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -48,6 +48,20 @@ namespace AgiltProjektarbete.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Ingredients",
+                columns: table => new
+                {
+                    id = table.Column<string>(nullable: false),
+                    IngredientType = table.Column<string>(nullable: true),
+                    Price = table.Column<int>(nullable: false),
+                    RestaurantId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ingredients", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -161,6 +175,9 @@ namespace AgiltProjektarbete.Migrations
                 columns: table => new
                 {
                     id = table.Column<string>(nullable: false),
+                    Name = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: true),
+                    Phone = table.Column<string>(nullable: true),
                     OwnerId = table.Column<string>(nullable: true),
                     ZIPCode = table.Column<int>(nullable: false),
                     PricePerKilometer = table.Column<int>(nullable: false)
@@ -210,8 +227,8 @@ namespace AgiltProjektarbete.Migrations
                     id = table.Column<string>(nullable: false),
                     Name = table.Column<string>(nullable: true),
                     Price = table.Column<int>(nullable: false),
-                    OrderId = table.Column<string>(nullable: true),
-                    RestaurantId = table.Column<string>(nullable: true)
+                    RestaurantId = table.Column<string>(nullable: true),
+                    OrderId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -233,12 +250,12 @@ namespace AgiltProjektarbete.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6ce35fa1-08e0-4eff-b8e5-cf66f8540f93", "17a9f161-9d90-4016-9da2-4148ce2791ee", "Customer", "CUSTOMER" });
+                values: new object[] { "ae353364-2451-4310-8585-cac859cb5606", "2e18b641-20ba-47e5-b056-660b81a63477", "Customer", "CUSTOMER" });
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[] { "6f55fc2b-ed9e-452c-a30d-d974473e3bd1", "02633cb5-f734-471d-8c33-cd8c7e3367ac", "RestaurantOwner", "RESTAURANTOWNER" });
+                values: new object[] { "caaf630a-f4fe-43f1-8bb8-679abaffcd8e", "a42fc0e5-4d87-4e3f-9f48-14713fc003f1", "RestaurantOwner", "RESTAURANTOWNER" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -321,6 +338,9 @@ namespace AgiltProjektarbete.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Ingredients");
 
             migrationBuilder.DropTable(
                 name: "Pizzas");
