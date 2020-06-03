@@ -32,6 +32,7 @@ namespace AgiltProjektarbete
             {
                 return View(userModel);
             }
+
             var user = mapper.Map<User>(userModel);
             var result = await userManager.CreateAsync(user, userModel.Password);
             if (!result.Succeeded)
@@ -43,8 +44,8 @@ namespace AgiltProjektarbete
 
                 return View(userModel);
             }
-            await userManager.AddToRoleAsync(user, userModel.UserRole.ToString());
 
+            await userManager.AddToRoleAsync(user, userModel.UserRole.ToString());
             return RedirectToAction(nameof(HomeController.Index), "Home");
         }
         

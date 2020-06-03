@@ -11,6 +11,7 @@ namespace AgiltProjektarbete.Controllers
     {
         private readonly ApplicationContext context;
         private readonly UserManager<User> userManager;
+
         public ProfileController(ApplicationContext context, UserManager<User> userManager)
         {
             this.context = context;

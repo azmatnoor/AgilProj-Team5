@@ -1,16 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Linq;
-using Newtonsoft.Json;
 using System.Collections.Generic;
-using System;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.AspNetCore.Identity;
 
 namespace AgiltProjektarbete.Controllers
 {
     public class ApiController : Controller
     {
         private readonly ApplicationContext context;
+
         public ApiController(ApplicationContext context)
         {
             this.context = context;

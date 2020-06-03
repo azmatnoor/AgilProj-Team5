@@ -37,10 +37,5 @@ namespace AgiltProjektarbete
             context.SaveChanges();
             return new OkResult();
         }
-
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }

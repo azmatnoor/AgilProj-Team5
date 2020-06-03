@@ -9,6 +9,7 @@ namespace AgiltProjektarbete
     {
         private readonly ApplicationContext context;
         private readonly UserManager<User> userManager;
+
         public OrderController(ApplicationContext context, UserManager<User> userManager)
         {
             this.context = context;

@@ -113,7 +113,7 @@ else
 }
 <a asp-controller="Home" asp-action="Index" class="btn btn-warning">Back</a>
 
-<div class="pre-scrollable">
+<div class="pre-scrollable mt-2">
     @foreach (var item in @Model.RestaurantReviews)
     {
         @Html.Partial("_RestaurantReviewPartial", item);
