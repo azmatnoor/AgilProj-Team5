@@ -27,13 +27,43 @@
                     <tr class="table-light">
                         <td>@pizza.Name</td>
                         <td>@pizza.Price kr</td>
-                        <td>@pizza.Ingredients</td>
+
                         <td>
                             <form method="post">
                                 <button type="submit" asp-action="DeletePizza" asp-route-id="@pizza.Id" class="btn btn-danger float-right"><i class="fa fa-trash"></i></button>
                             </form>
                         </td>
                     </tr>
+                }
+
+            }
+            else
+            {
+                <tr>
+                    <td>Nothing in menu</td>
+                </tr>
+            }
+        </tbody>
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Ingredients</th>
+                <th scope="col">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (@Model.CurrentIngredients != null && @Model.CurrentIngredients.Count() > 0)
+            {
+                @foreach (var ingredient in @Model.CurrentIngredients)
+                {
+            <tr>
+                <td>@ingredient.IngredientType</td>
+                <td>@ingredient.Price kr</td>
+                <td>
+                    <form method="post">
+                        <button type="submit" asp-action="DeleteIngredient" asp-route-id="@ingredient.Id" class="btn btn-danger float-right"><i class="fa fa-trash"></i></button>
+                    </form>
+                </td>
+            </tr>
                 }
             }
             else
@@ -73,10 +103,32 @@
         </form>
     </div>
 </div>
-<div class="container">
-    <a asp-action="Index" class="btn btn-dark"><i class="fas fa-long-arrow-alt-left"></i> Back</a>
+<div class="container mt-5">
+    <p>
+        <button class="btn btn-success" type="button" data-toggle="collapse" data-target="#collapseAddIngredient" aria-expanded="false" aria-controls="collapseAddIngredient">
+            Add Ingredient
+        </button>
+    </p>
+    <div class="collapse mb-5" id="collapseAddIngredient">
+        <form asp-action="AddIngredients" class="w-50">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" asp-for="Ingredient.IngredientType" class="form-control" />
+                <span asp-validation-for="Ingredient.IngredientType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input type="number" asp-for="Ingredient.Price" class="form-control" />
+                <span asp-validation-for="Ingredient.Price" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-dark">Add</button>
+        </form>
+    </div>
 </div>
+    <div class="container">
+        <a asp-action="Index" class="btn btn-dark"><i class="fas fa-long-arrow-alt-left"></i> Back</a>
+    </div>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }

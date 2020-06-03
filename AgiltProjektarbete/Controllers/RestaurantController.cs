@@ -44,8 +44,9 @@ namespace AgiltProjektarbete
             var model = new CreateMenuModel();
             model.Restaurant = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First();
             model.CurrentMenu = context.Pizzas.Where(o => o.RestaurantId == model.Restaurant.Id && o.InMenu).ToList();
+            model.CurrentIngredients = context.Ingredients.Where(o => o.RestaurantId == model.Restaurant.Id).ToList();
 
-            if(model.Restaurant != null)
+            if (model.Restaurant != null)
             {
                 return View(model);
             } else
@@ -145,12 +146,47 @@ namespace AgiltProjektarbete
             context.SaveChanges();
             return RedirectToAction("Index");
         }
-        ////här börjar min kod
-        //[Authorize(Roles = "RestaurantOwner")]
-        //[HttpPost]
-        ////public async Task<IActionResult> ModifyPizza(Pizza pizza)
-        ////{
 
-        ////}
+        [Authorize(Roles = "RestaurantOwner")]
+        [HttpPost]
+        public async Task<IActionResult> AddIngredients(CreateMenuModel model)
+        {
+            if (model.Ingredient != null)
+            {
+                var ingredient = model.Ingredient;
+                ingredient.Id = Guid.NewGuid().ToString();
+                ingredient.RestaurantId = context.Restaurants.Where(o => o.Owner.Id == userManager.GetUserAsync(User).Result.Id).First().Id;
+                ingredient.InMenu = true;
+                if (context.Ingredients.Where(o => o.RestaurantId == ingredient.RestaurantId).Count() < 1)
+                {
+                    context.Ingredients.Add(ingredient);
+                    await context.SaveChangesAsync();
+                }
+                else
+                {
+                    ModelState.AddModelError("1337", "A ingredient with that name already exists.");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("800815", "You need to add something.");
+            }
+
+            return RedirectToAction("EditMenu");
+        }
+        [Authorize(Roles = "RestaurantOwner")]
+        [HttpPost]
+        public async Task<IActionResult> DeleteIngredient(string id)
+        {
+            if (id != null)
+            {
+                var user = userManager.GetUserAsync(User).Result;
+                var restaurant = context.Restaurants.Where(o => o.Owner.Id == user.Id).First();
+                context.Ingredients.Remove(context.Ingredients.Where(o => o.RestaurantId == restaurant.Id && o.Id == id).First());
+                await context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("EditMenu");
+        }
     }
 }
