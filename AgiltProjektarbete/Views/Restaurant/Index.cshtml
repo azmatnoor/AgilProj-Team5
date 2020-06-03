@@ -40,7 +40,7 @@
                         <td>@pizza.Price kr</td>
                         @if (@Model.Owner == null)
                         {
-                            <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-pizzaid="@pizza.Id">Add to cart</button></td>
+                            <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-pizzaid="@pizza.Id">Modify</button></td>
                         }
                     </tr>
                 }
@@ -151,12 +151,20 @@
                             <div class="modal-choices">
                                 <div class="modal-col-1">
                                     <ul>
-                                        @foreach (var ingredient in @Model.Ingredients)
+                                        @if (@Model.Ingredients.Any())
+                                        {
+                                            @foreach (var ingredient in @Model.Ingredients)
+                                            {
+                                                <li>
+                                                    <span>@ingredient.Price kr </span>
+                                                    <input type="checkbox" value='@ingredient.Id' />
+                                                    <label>@ingredient.IngredientType</label>
+                                                </li>
+                                            }
+                                        } else
                                         {
                                             <li>
-                                                <span>@ingredient.Price kr </span>
-                                                <input type="checkbox" value='@ingredient.Id' />
-                                                <label>@ingredient.IngredientType</label>
+                                                @Model.Name has not yet added any extra ingredients.
                                             </li>
                                         }
                                     </ul>

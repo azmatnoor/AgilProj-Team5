@@ -48,6 +48,9 @@ namespace AgiltProjektarbete.Migrations
                         .HasColumnName("id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<bool>("InMenu")
+                        .HasColumnType("bit");
+
                     b.Property<string>("IngredientType")
                         .HasColumnType("nvarchar(max)");
 
@@ -285,15 +288,15 @@ namespace AgiltProjektarbete.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6b6db1f7-b8e3-4bee-8925-b3a31bf62587",
-                            ConcurrencyStamp = "377a288a-1081-428b-9eed-7790ba8c6cbe",
+                            Id = "3677e944-e60a-4e64-a37f-7815fbcb15b4",
+                            ConcurrencyStamp = "c84c5b2a-d841-4771-83a6-a55b05a8095d",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = "87111c31-516e-487a-8a26-b3faa076f262",
-                            ConcurrencyStamp = "a536e042-5e90-4e4c-8ea9-60f0547dda3d",
+                            Id = "ccf94139-303e-43c6-bdba-04e1ade1c9b1",
+                            ConcurrencyStamp = "77cbcbae-7b86-488d-a2e1-206278dd1ccd",
                             Name = "RestaurantOwner",
                             NormalizedName = "RESTAURANTOWNER"
                         });
