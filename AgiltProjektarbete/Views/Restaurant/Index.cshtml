@@ -22,6 +22,7 @@
             <tr>
                 <th scope="col">Pizza</th>
                 <th scope="col">Price</th>
+                <th scope="col">Ingredients</th>
                 @if (Model.Owner == null)
                 {
                     <th scope="col"></th>
@@ -38,6 +39,7 @@
                     <tr>
                         <td>@pizza.Name</td>
                         <td>@pizza.Price kr</td>
+                        <td>@pizza.Ingredients</td>
                         @if (@Model.Owner == null)
                         {
                             <td><button class="btn btn-primary" data-toggle="modal" data-target="#ingredientsModal" data-pizzaid="@pizza.Id">Add to cart</button></td>

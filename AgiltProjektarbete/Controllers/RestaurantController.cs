@@ -145,5 +145,12 @@ namespace AgiltProjektarbete
             context.SaveChanges();
             return RedirectToAction("Index");
         }
+        ////här börjar min kod
+        //[Authorize(Roles = "RestaurantOwner")]
+        //[HttpPost]
+        ////public async Task<IActionResult> ModifyPizza(Pizza pizza)
+        ////{
+
+        ////}
     }
 }
