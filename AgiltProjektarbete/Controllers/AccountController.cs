@@ -91,7 +91,6 @@ namespace AgiltProjektarbete
                 return Redirect(returnUrl);
             else
                 return RedirectToAction(nameof(HomeController.Index), "Home");
-
         }
     }
 }
