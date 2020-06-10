@@ -13,7 +13,6 @@ namespace AgiltProjektarbete.Controllers
             this.context = context;
         }
 
-        //Emil M API
         [Route("{controller}/pizzas/{id}")]
         [HttpGet]
         public ActionResult Pizzas(string id)
@@ -27,7 +26,6 @@ namespace AgiltProjektarbete.Controllers
             return Json(pizzas.GroupBy(p => p.Name).Select(p => new GoogleChartParsed { Key = p.Key, Value = p.Count() }).ToList());    
         }
 
-        //Alex
         [Route("{controller}/soldpizzas/{id}")]
         [HttpGet]
         public ActionResult SoldPizzas(string id)

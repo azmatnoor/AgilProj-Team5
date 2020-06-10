@@ -92,8 +92,8 @@
                 </div>
                 <div class="form-group">
                     <label>Price Per Km</label>
-                    <input type="range" min="0" max="25" step="1" id="pricePerKmSlider" asp-for="PricePerKilometer" class="form-control" />
-                    <span id="pricePerKm"></span>
+                    <p id="pricePerKm"></p>
+                    <input type="range" min="1" max="25" step="1" id="pricePerKmSlider" onchange="updateSliderValue()" asp-for="PricePerKilometer" class="form-control" />
                 </div>
                 <button type="submit" class="btn btn-success">Confirm</button>
             </form>
@@ -153,6 +153,17 @@ else
 
 @section scripts {
     <script>
+        function updateSliderValue() {
+            return () => {
+                let slider = document.getElementById("pricePerKmSlider");
+                let output = document.getElementById("pricePerKm");
+                output.innerHTML = slider.value + " kr";
+
+                slider.oninput = function () {
+                    output.innerHTML = this.value + " kr";
+                }
+            }
+        }
         document.getElementById("publish").onclick = HandleReviewSubmit();
 
     function Buy(pizzaId, restaurantId) {
@@ -226,7 +237,6 @@ else
         google.charts.setOnLoadCallback(drawChart);
 
         async function drawChart() {
-
             var fetchData = await fetch("api/soldpizzas/@Html.Raw(@Model.Id)").then((response) => response.json());
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Type');

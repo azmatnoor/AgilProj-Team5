@@ -29,23 +29,17 @@ namespace AgiltProjektarbete
 
             services.AddSession();
 
-            //Add DbContext
             services.AddDbContext<ApplicationContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Onlinepizza")));
-
-            //Add identity
             services.AddIdentity<User, IdentityRole>().
                 AddEntityFrameworkStores<ApplicationContext>();
 
-            //Add custom claims
             services.AddScoped<IUserClaimsPrincipalFactory<User>, CustomClaimsFactory>();
 
             services.AddScoped<IUserClaimsPrincipalFactory<User>, UserClaimsPrincipalFactory<User, IdentityRole>>();
 
-            //Add automapper
             services.AddAutoMapper(typeof(Startup));
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
