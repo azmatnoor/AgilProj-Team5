@@ -81,7 +81,7 @@ namespace AgiltProjektarbete
             cart.Pizzas.Remove(cart.Pizzas.Single(o => o.Id == pizzaId));
             cart.Quantity.Remove(pizzaId);
             SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
-            return RedirectToAction("Index");
+            return RedirectToAction("Index");     
         }
 
         private string getPizzaIdFromCart(string id)

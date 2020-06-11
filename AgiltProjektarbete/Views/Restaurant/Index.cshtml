@@ -144,7 +144,8 @@ else
                             }
                         </ul>
                     </div>
-                    <div class="modal-footer"></div>
+                    <div class="modal-footer">
+                    </div>
                 </div>
             </div>
         </div>
@@ -153,15 +154,6 @@ else
 
 @section scripts {
     <script>
-
-        let slider = document.getElementById("pricePerKmSlider");
-        let output = document.getElementById("pricePerKm");
-        output.innerHTML = slider.value + " kr";
-
-        slider.oninput = function () {
-            output.innerHTML = this.value + " kr";
-        }
-
         document.getElementById("publish").onclick = HandleReviewSubmit();
 
     function Buy(pizzaId, restaurantId) {
@@ -252,6 +244,15 @@ else
             var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
             chart.draw(data, options);
         }
+
+        let slider = document.getElementById("pricePerKmSlider");
+        let output = document.getElementById("pricePerKm");
+        output.innerHTML = slider.value + " kr";
+
+        slider.oninput = function () {
+            output.innerHTML = this.value + " kr";
+        }
+
     </script>
 }
 
